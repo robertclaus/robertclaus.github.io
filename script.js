@@ -1,9 +1,9 @@
 function createBubbleChart(error, entries) {
-  var populations = entries.map(function(country) { return +country.chars_total; });
-  var meanPopulation = d3.mean(populations),
-      populationExtent = d3.extent(populations),
-      populationScaleX,
-      populationScaleY;
+  var length = entries.map(function(entry) { return +entry.chars_total; });
+  var meanPopulation = d3.mean(length),
+      lengthExtent = d3.extent(length),
+      lengthScaleX,
+      lengthScaleY;
 
 
   var groups = d3.set(entries.map(function(entry) { return entry.groupID; }));
@@ -11,13 +11,14 @@ function createBubbleChart(error, entries) {
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10)
         .domain(groupDomain);
 
+
   var width = 1200,
       height = 800;
   var svg,
       circles,
       circleSize = { min: 10, max: 80 };
   var circleRadiusScale = d3.scaleSqrt()
-    .domain(populationExtent)
+    .domain(lengthExtent)
     .range([circleSize.min, circleSize.max]);
 
   var forces,
@@ -111,7 +112,7 @@ function createBubbleChart(error, entries) {
   }
 
   function createCircles() {
-    var formatPopulation = d3.format(",");
+    var formatLength = d3.format(",");
     circles = svg.selectAll("circle")
       .data(entries)
       .enter()
@@ -128,7 +129,7 @@ function createBubbleChart(error, entries) {
     function updateCountryInfo(country) {
       var info = "";
       if (country) {
-        info = [country.CountryName, formatPopulation(country.chars_total)].join(": ");
+        info = [country.CountryName, formatLength(country.chars_total)].join(": ");
       }
       d3.select("#country-info").html(info);
     }
@@ -148,7 +149,7 @@ function createBubbleChart(error, entries) {
       combine:        createCombineForces(),
       countryCenters: createCountryCenterForces(),
       continent:      createContinentForces(),
-      population:     createPopulationForces()
+      length:     createLengthForces()
     };
 
     function createCombineForces() {
@@ -214,23 +215,23 @@ function createBubbleChart(error, entries) {
       function bottom(dimension) { return dimension / 4 * 3; }
     }
 
-    function createPopulationForces() {
-      var scaledPopulationMargin = circleSize.max;
+    function createLengthForces() {
+      var scaledLengthMargin = circleSize.max;
 
-      populationScaleX = d3.scaleBand()
+      lengthScaleX = d3.scaleBand()
         .domain(groupDomain)
-        .range([scaledPopulationMargin, width - scaledPopulationMargin*2]);
-      populationScaleY = d3.scaleLog()
-        .domain(populationExtent)
-        .range([height - scaledPopulationMargin, scaledPopulationMargin*2]);
+        .range([scaledLengthMargin, width - scaledLengthMargin*2]);
+      lengthScaleY = d3.scaleLog()
+        .domain(lengthExtent)
+        .range([height - scaledLengthMargin, scaledLengthMargin*2]);
 
-      var centerCirclesInScaleBandOffset = populationScaleX.bandwidth() / 2;
+      var centerCirclesInScaleBandOffset = lengthScaleX.bandwidth() / 2;
       return {
         x: d3.forceX(function(d) {
-            return populationScaleX(d.groupID) + centerCirclesInScaleBandOffset;
+            return lengthScaleX(d.groupID) + centerCirclesInScaleBandOffset;
           }).strength(forceStrength),
         y: d3.forceY(function(d) {
-          return populationScaleY(d.chars_total);
+          return lengthScaleY(d.chars_total);
         }).strength(forceStrength)
       };
     }
@@ -251,14 +252,14 @@ function createBubbleChart(error, entries) {
   }
 
   function forceCollide(d) {
-    return countryCenterGrouping() || populationGrouping() ? 0 : circleRadiusScale(d.chars_total) + 1;
+    return countryCenterGrouping() || lengthGrouping() ? 0 : circleRadiusScale(d.chars_total) + 1;
   }
 
   function countryCenterGrouping() {
     return isChecked("#country-centers");
   }
 
-  function populationGrouping() {
+  function lengthGrouping() {
     return isChecked("#total_chars");
   }
 
@@ -287,7 +288,7 @@ function createBubbleChart(error, entries) {
   function addFillListener() {
     d3.selectAll('input[name="fill"]')
       .on("change", function() {
-        toggleContinentKey(!flagFill() && !populationGrouping());
+        toggleContinentKey(!flagFill() && !lengthGrouping());
         updateCircles();
       });
   }
@@ -296,13 +297,13 @@ function createBubbleChart(error, entries) {
     addListener("#combine",         forces.combine);
     addListener("#country-centers", forces.countryCenters);
     addListener("#groups",      forces.continent);
-    addListener("#total_chars",      forces.population);
+    addListener("#total_chars",      forces.length);
 
     function addListener(selector, forces) {
       d3.select(selector).on("click", function() {
         updateForces(forces);
-        toggleContinentKey(!flagFill() && !populationGrouping());
-        togglePopulationAxes(populationGrouping());
+        toggleContinentKey(!flagFill() && !lengthGrouping());
+        toggleLengthAxes(lengthGrouping());
       });
     }
 
@@ -315,7 +316,7 @@ function createBubbleChart(error, entries) {
         .restart();
     }
 
-    function togglePopulationAxes(showAxes) {
+    function toggleLengthAxes(showAxes) {
       var onScreenXOffset = 40,
           offScreenXOffset = -40;
       var onScreenYOffset = 40,
@@ -339,7 +340,7 @@ function createBubbleChart(error, entries) {
         var numberOfTicks = 10,
             tickFormat = ".0s";
 
-        var xAxis = d3.axisBottom(populationScaleX)
+        var xAxis = d3.axisBottom(lengthScaleX)
           .ticks(numberOfTicks, tickFormat);
 
         svg.append("g")
@@ -349,7 +350,7 @@ function createBubbleChart(error, entries) {
           .selectAll(".tick text")
             .attr("font-size", "16px");
 
-        var yAxis = d3.axisLeft(populationScaleY)
+        var yAxis = d3.axisLeft(lengthScaleY)
           .ticks(numberOfTicks, tickFormat);
         svg.append("g")
           .attr("class", "y-axis")
