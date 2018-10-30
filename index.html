@@ -30,7 +30,6 @@
 <script>
   d3.queue()
     .defer(d3.csv, "countries.csv")
-    .defer(d3.json, "continent-names.json")
     .await(createBubbleChart);
 </script>
 

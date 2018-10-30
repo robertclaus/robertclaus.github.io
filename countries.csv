@@ -1,4 +1,4 @@
-CountryName,CountryCode,ContinentCode,CenterLongitude,CenterLatitude,chars_total
+CountryName,groupID,ContinentCode,CenterLongitude,CenterLatitude,chars_total
 Afghanistan,AF,AS,65.0,33.0,32526560
 Albania,AL,EU,20.0,41.0,2896680
 Algeria,DZ,AF,3.0,28.0,39666520

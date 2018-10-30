@@ -1,4 +1,4 @@
-function createBubbleChart(error, countries, continentNames) {
+function createBubbleChart(error, countries) {
   var populations = countries.map(function(country) { return +country.chars_total; });
   var meanPopulation = d3.mean(populations),
       populationExtent = d3.extent(populations),
@@ -80,7 +80,7 @@ function createBubbleChart(error, countries, continentNames) {
         .append("text")
           .attr("text-anchor", "middle")
           .attr("x", function(d) { return continentKeyScale(d) + keyElementWidth/2; })
-          .text(function(d) { return continentNames[d]; });
+          .text(function(d) { return d; });
 
       // The text BBox has non-zero values only after rendering
       d3.selectAll("g.continent-key-element text")
@@ -135,7 +135,7 @@ function createBubbleChart(error, countries, continentNames) {
   function updateCircles() {
     circles
       .attr("fill", function(d) {
-        return flagFill() ? "url(#" + d.CountryCode + ")" : continentColorScale(d.ContinentCode);
+        return flagFill() ? "url(#" + d.groupID + ")" : continentColorScale(d.ContinentCode);
       });
   }
 
@@ -213,13 +213,13 @@ function createBubbleChart(error, countries, continentNames) {
     }
 
     function createPopulationForces() {
-      var continentNamesDomain = continents.values().map(function(continentCode) {
-        return continentNames[continentCode];
+      var groupIdDomain = countries.values().map(function(d) {
+        return d.groupID;
       });
       var scaledPopulationMargin = circleSize.max;
 
       populationScaleX = d3.scaleBand()
-        .domain(continentNamesDomain)
+        .domain(groupIdDomain)
         .range([scaledPopulationMargin, width - scaledPopulationMargin*2]);
       populationScaleY = d3.scaleLog()
         .domain(populationExtent)
@@ -228,7 +228,7 @@ function createBubbleChart(error, countries, continentNames) {
       var centerCirclesInScaleBandOffset = populationScaleX.bandwidth() / 2;
       return {
         x: d3.forceX(function(d) {
-            return populationScaleX(continentNames[d.ContinentCode]) + centerCirclesInScaleBandOffset;
+            return populationScaleX(d.groupID) + centerCirclesInScaleBandOffset;
           }).strength(forceStrength),
         y: d3.forceY(function(d) {
           return populationScaleY(d.chars_total);
@@ -269,7 +269,7 @@ function createBubbleChart(error, countries, continentNames) {
       .data(countries)
       .enter()
         .append("pattern")
-        .attr("id", function(d) { return d.CountryCode; })
+        .attr("id", function(d) { return d.groupID; })
         .attr("class", "flag")
         .attr("width", "100%")
         .attr("height", "100%")
@@ -281,7 +281,7 @@ function createBubbleChart(error, countries, continentNames) {
           // slice: scale the image to fill the circle
           .attr("preserveAspectRatio", "xMidYMid slice")
           .attr("xlink:href", function(d) {
-            return "flags/" + d.CountryCode + ".svg";
+            return "flags/" + d.groupID + ".svg";
           });
   }
 
