@@ -1,4 +1,4 @@
-function createBubbleChart(error, countries) {
+function createBubbleChart(error, entries) {
   var populations = countries.map(function(country) { return +country.chars_total; });
   var meanPopulation = d3.mean(populations),
       populationExtent = d3.extent(populations),
@@ -6,10 +6,10 @@ function createBubbleChart(error, countries) {
       populationScaleY;
 
 
-  var continents = d3.set(countries.map(function(country) { return country.groupID; }));
-  var groupIdDomain = continents.values();
-  var continentColorScale = d3.scaleOrdinal(d3.schemeCategory10)
-        .domain(continents.values());
+  var groups = d3.set(entries.map(function(entry) { return entry.groupID; }));
+  var groupDomain = groups.values();
+  var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10)
+        .domain(groupDomain);
 
   var width = 1200,
       height = 800;
@@ -57,16 +57,16 @@ function createBubbleChart(error, countries) {
     }
 
     function createContinentKey() {
-      var keyWidth = keyElementWidth * continents.values().length;
+      var keyWidth = keyElementWidth * groups.values().length;
       var continentKeyScale = d3.scaleBand()
-        .domain(continents.values())
+        .domain(groups.values())
         .range([(width - keyWidth) / 2, (width + keyWidth) / 2]);
 
       svg.append("g")
         .attr("class", "continent-key")
         .attr("transform", "translate(0," + (height + offScreenYOffset) + ")")
         .selectAll("g")
-        .data(continents.values())
+        .data(groups.values())
         .enter()
           .append("g")
             .attr("class", "continent-key-element");
@@ -76,7 +76,7 @@ function createBubbleChart(error, countries) {
           .attr("width", keyElementWidth)
           .attr("height", keyElementHeight)
           .attr("x", function(d) { return continentKeyScale(d); })
-          .attr("fill", function(d) { return continentColorScale(d); });
+          .attr("fill", function(d) { return groupColorScale(d); });
 
       d3.selectAll("g.continent-key-element")
         .append("text")
@@ -113,7 +113,7 @@ function createBubbleChart(error, countries) {
   function createCircles() {
     var formatPopulation = d3.format(",");
     circles = svg.selectAll("circle")
-      .data(countries)
+      .data(entries)
       .enter()
         .append("circle")
         .attr("r", function(d) { return circleRadiusScale(d.chars_total); })
@@ -137,7 +137,7 @@ function createBubbleChart(error, countries) {
   function updateCircles() {
     circles
       .attr("fill", function(d) {
-        return flagFill() ? "url(#" + d.groupID + ")" : continentColorScale(d.topicID);
+        return flagFill() ? "url(#" + d.groupID + ")" : groupColorScale(d.topicID);
       });
   }
 
@@ -218,7 +218,7 @@ function createBubbleChart(error, countries) {
       var scaledPopulationMargin = circleSize.max;
 
       populationScaleX = d3.scaleBand()
-        .domain(groupIdDomain)
+        .domain(groupDomain)
         .range([scaledPopulationMargin, width - scaledPopulationMargin*2]);
       populationScaleY = d3.scaleLog()
         .domain(populationExtent)
@@ -227,7 +227,7 @@ function createBubbleChart(error, countries) {
       var centerCirclesInScaleBandOffset = populationScaleX.bandwidth() / 2;
       return {
         x: d3.forceX(function(d) {
-            return populationScaleX(groupIdDomain[d.groupID]) + centerCirclesInScaleBandOffset;
+            return populationScaleX(d.groupID) + centerCirclesInScaleBandOffset;
           }).strength(forceStrength),
         y: d3.forceY(function(d) {
           return populationScaleY(d.chars_total);
@@ -242,7 +242,7 @@ function createBubbleChart(error, countries) {
       .force("x", forces.combine.x)
       .force("y", forces.combine.y)
       .force("collide", d3.forceCollide(forceCollide));
-    forceSimulation.nodes(countries)
+    forceSimulation.nodes(entries)
       .on("tick", function() {
         circles
           .attr("cx", function(d) { return d.x; })
@@ -265,7 +265,7 @@ function createBubbleChart(error, countries) {
   function addFlagDefinitions() {
     var defs = svg.append("defs");
     defs.selectAll(".flag")
-      .data(countries)
+      .data(entries)
       .enter()
         .append("pattern")
         .attr("id", function(d) { return d.groupID; })
@@ -295,7 +295,7 @@ function createBubbleChart(error, countries) {
   function addGroupingListeners() {
     addListener("#combine",         forces.combine);
     addListener("#country-centers", forces.countryCenters);
-    addListener("#continents",      forces.continent);
+    addListener("#groups",      forces.continent);
     addListener("#total_chars",      forces.population);
 
     function addListener(selector, forces) {
