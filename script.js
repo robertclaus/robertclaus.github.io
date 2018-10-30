@@ -1,5 +1,5 @@
 function createBubbleChart(error, countries, continentNames) {
-  var populations = countries.map(function(country) { return +country.Population; });
+  var populations = countries.map(function(country) { return +country.chars_total; });
   var meanPopulation = d3.mean(populations),
       populationExtent = d3.extent(populations),
       populationScaleX,
@@ -114,7 +114,7 @@ function createBubbleChart(error, countries, continentNames) {
       .data(countries)
       .enter()
         .append("circle")
-        .attr("r", function(d) { return circleRadiusScale(d.Population); })
+        .attr("r", function(d) { return circleRadiusScale(d.chars_total); })
         .on("mouseover", function(d) {
           updateCountryInfo(d);
         })
@@ -126,7 +126,7 @@ function createBubbleChart(error, countries, continentNames) {
     function updateCountryInfo(country) {
       var info = "";
       if (country) {
-        info = [country.CountryName, formatPopulation(country.Population)].join(": ");
+        info = [country.CountryName, formatPopulation(country.chars_total)].join(": ");
       }
       d3.select("#country-info").html(info);
     }
@@ -231,7 +231,7 @@ function createBubbleChart(error, countries, continentNames) {
             return populationScaleX(continentNames[d.ContinentCode]) + centerCirclesInScaleBandOffset;
           }).strength(forceStrength),
         y: d3.forceY(function(d) {
-          return populationScaleY(d.Population);
+          return populationScaleY(d.chars_total);
         }).strength(forceStrength)
       };
     }
@@ -252,7 +252,7 @@ function createBubbleChart(error, countries, continentNames) {
   }
 
   function forceCollide(d) {
-    return countryCenterGrouping() || populationGrouping() ? 0 : circleRadiusScale(d.Population) + 1;
+    return countryCenterGrouping() || populationGrouping() ? 0 : circleRadiusScale(d.chars_total) + 1;
   }
 
   function countryCenterGrouping() {
@@ -260,7 +260,7 @@ function createBubbleChart(error, countries, continentNames) {
   }
 
   function populationGrouping() {
-    return isChecked("#population");
+    return isChecked("#total_chars");
   }
 
   function addFlagDefinitions() {
@@ -297,7 +297,7 @@ function createBubbleChart(error, countries, continentNames) {
     addListener("#combine",         forces.combine);
     addListener("#country-centers", forces.countryCenters);
     addListener("#continents",      forces.continent);
-    addListener("#population",      forces.population);
+    addListener("#total_chars",      forces.population);
 
     function addListener(selector, forces) {
       d3.select(selector).on("click", function() {
