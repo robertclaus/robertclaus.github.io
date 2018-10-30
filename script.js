@@ -138,7 +138,7 @@ function createBubbleChart(error, entries) {
   function updateCircles() {
     circles
       .attr("fill", function(d) {
-        return flagFill() ? "url(#" + d.groupID + ")" : groupColorScale(d.topicID);
+        return flagFill() ? "url(#" + d.groupID + ")" : groupColorScale(d.groupID);
       });
   }
 
@@ -183,26 +183,26 @@ function createBubbleChart(error, entries) {
       };
 
       function continentForceX(d) {
-        if (d.topicID === "EU") {
+        if (d.groupID === "EU") {
           return left(width);
-        } else if (d.topicID === "AF") {
+        } else if (d.groupID === "AF") {
           return left(width);
-        } else if (d.topicID === "AS") {
+        } else if (d.groupID === "AS") {
           return right(width);
-        } else if (d.topicID === "NA" || d.topicID === "SA") {
+        } else if (d.groupID === "NA" || d.groupID === "SA") {
           return right(width);
         }
         return center(width);
       }
 
       function continentForceY(d) {
-        if (d.topicID === "EU") {
+        if (d.groupID === "EU") {
           return top(height);
-        } else if (d.topicID === "AF") {
+        } else if (d.groupID === "AF") {
           return bottom(height);
-        } else if (d.topicID === "AS") {
+        } else if (d.groupID === "AS") {
           return top(height);
-        } else if (d.topicID === "NA" || d.topicID === "SA") {
+        } else if (d.groupID === "NA" || d.groupID === "SA") {
           return bottom(height);
         }
         return center(height);
