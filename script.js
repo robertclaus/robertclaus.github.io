@@ -5,8 +5,10 @@ function createBubbleChart(error, entries) {
       lengthScaleX,
       lengthScaleY;
 
+  var mainKey = "groupID";
+  var secondaryKey = "topicID";
 
-  var groups = d3.set(entries.map(function(entry) { return entry.groupID; }));
+  var groups = d3.set(entries.map(function(entry) { return entry[mainKey]; }));
   var groupDomain = groups.values();
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10)
         .domain(groupDomain);
@@ -138,7 +140,7 @@ function createBubbleChart(error, entries) {
   function updateCircles() {
     circles
       .attr("fill", function(d) {
-        return flagFill() ? "url(#" + d.groupID + ")" : groupColorScale(d['groupID']);
+        return flagFill() ? "url(#" + d[mainKey] + ")" : groupColorScale(d[mainKey]);
       });
   }
 
@@ -183,26 +185,26 @@ function createBubbleChart(error, entries) {
       };
 
       function continentForceX(d) {
-        if (d.groupID === "EU") {
+        if (d[mainKey] === "EU") {
           return left(width);
-        } else if (d.groupID === "AF") {
+        } else if (d[mainKey] === "AF") {
           return left(width);
-        } else if (d.groupID === "AS") {
+        } else if (d[mainKey] === "AS") {
           return right(width);
-        } else if (d.groupID === "NA" || d.groupID === "SA") {
+        } else if (d[mainKey] === "NA" || d[mainKey] === "SA") {
           return right(width);
         }
         return center(width);
       }
 
       function continentForceY(d) {
-        if (d.groupID === "EU") {
+        if (d[mainKey] === "EU") {
           return top(height);
-        } else if (d.groupID === "AF") {
+        } else if (d[mainKey] === "AF") {
           return bottom(height);
-        } else if (d.groupID === "AS") {
+        } else if (d[mainKey] === "AS") {
           return top(height);
-        } else if (d.groupID === "NA" || d.groupID === "SA") {
+        } else if (d[mainKey] === "NA" || d[mainKey] === "SA") {
           return bottom(height);
         }
         return center(height);
@@ -228,7 +230,7 @@ function createBubbleChart(error, entries) {
       var centerCirclesInScaleBandOffset = lengthScaleX.bandwidth() / 2;
       return {
         x: d3.forceX(function(d) {
-            return lengthScaleX(d.groupID) + centerCirclesInScaleBandOffset;
+            return lengthScaleX(d[mainKey]) + centerCirclesInScaleBandOffset;
           }).strength(forceStrength),
         y: d3.forceY(function(d) {
           return lengthScaleY(d.chars_total);
@@ -269,7 +271,7 @@ function createBubbleChart(error, entries) {
       .data(entries)
       .enter()
         .append("pattern")
-        .attr("id", function(d) { return d.groupID; })
+        .attr("id", function(d) { return d[mainKey]; })
         .attr("class", "flag")
         .attr("width", "100%")
         .attr("height", "100%")
@@ -281,7 +283,7 @@ function createBubbleChart(error, entries) {
           // slice: scale the image to fill the circle
           .attr("preserveAspectRatio", "xMidYMid slice")
           .attr("xlink:href", function(d) {
-            return "flags/" + d.groupID + ".svg";
+            return "flags/" + d[mainKey] + ".svg";
           });
   }
 
