@@ -1,5 +1,5 @@
 function createBubbleChart(error, entries) {
-  var populations = countries.map(function(country) { return +country.chars_total; });
+  var populations = entries.map(function(country) { return +country.chars_total; });
   var meanPopulation = d3.mean(populations),
       populationExtent = d3.extent(populations),
       populationScaleX,
