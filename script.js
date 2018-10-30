@@ -5,8 +5,9 @@ function createBubbleChart(error, countries) {
       populationScaleX,
       populationScaleY;
 
-  var groupIdDomain = d3.set(countries.map(function(country){return country.groupID}));
-  var continents = d3.set(countries.map(function(country) { return country.topicID; }));
+
+  var continents = d3.set(countries.map(function(country) { return country.groupID; }));
+  var groupIdDomain = continents.values();
   var continentColorScale = d3.scaleOrdinal(d3.schemeCategory10)
         .domain(continents.values());
 
