@@ -6,7 +6,7 @@ function createBubbleChart(error, countries) {
       populationScaleY;
 
   var groupIdDomain = d3.set(countries.map(function(country){return country.groupID}));
-  var continents = d3.set(countries.map(function(country) { return country.ContinentCode; }));
+  var continents = d3.set(countries.map(function(country) { return country.topicID; }));
   var continentColorScale = d3.scaleOrdinal(d3.schemeCategory10)
         .domain(continents.values());
 
@@ -136,7 +136,7 @@ function createBubbleChart(error, countries) {
   function updateCircles() {
     circles
       .attr("fill", function(d) {
-        return flagFill() ? "url(#" + d.groupID + ")" : continentColorScale(d.ContinentCode);
+        return flagFill() ? "url(#" + d.groupID + ")" : continentColorScale(d.topicID);
       });
   }
 
@@ -181,26 +181,26 @@ function createBubbleChart(error, countries) {
       };
 
       function continentForceX(d) {
-        if (d.ContinentCode === "EU") {
+        if (d.topicID === "EU") {
           return left(width);
-        } else if (d.ContinentCode === "AF") {
+        } else if (d.topicID === "AF") {
           return left(width);
-        } else if (d.ContinentCode === "AS") {
+        } else if (d.topicID === "AS") {
           return right(width);
-        } else if (d.ContinentCode === "NA" || d.ContinentCode === "SA") {
+        } else if (d.topicID === "NA" || d.topicID === "SA") {
           return right(width);
         }
         return center(width);
       }
 
       function continentForceY(d) {
-        if (d.ContinentCode === "EU") {
+        if (d.topicID === "EU") {
           return top(height);
-        } else if (d.ContinentCode === "AF") {
+        } else if (d.topicID === "AF") {
           return bottom(height);
-        } else if (d.ContinentCode === "AS") {
+        } else if (d.topicID === "AS") {
           return top(height);
-        } else if (d.ContinentCode === "NA" || d.ContinentCode === "SA") {
+        } else if (d.topicID === "NA" || d.topicID === "SA") {
           return bottom(height);
         }
         return center(height);
