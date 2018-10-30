@@ -138,7 +138,7 @@ function createBubbleChart(error, entries) {
   function updateCircles() {
     circles
       .attr("fill", function(d) {
-        return flagFill() ? "url(#" + d.groupID + ")" : groupColorScale(d.groupID);
+        return flagFill() ? "url(#" + d.groupID + ")" : groupColorScale(d['groupID']);
       });
   }
 
