@@ -237,11 +237,7 @@ function createBubbleChart(error, entries) {
   }
 
   function forceCollide(d) {
-    return countryCenterGrouping() || lengthGrouping() ? 0 : circleRadiusScale(d.chars_total) + 1;
-  }
-
-  function countryCenterGrouping() {
-    return isChecked("#country-centers");
+    return lengthGrouping() ? 0 : circleRadiusScale(d.chars_total) + 1;
   }
 
   function lengthGrouping() {
