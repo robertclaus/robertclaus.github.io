@@ -28,7 +28,7 @@ function createBubbleChart(error, entries) {
       forceSimulation;
 
   createSVG();
-  toggleContinentKey(!flagFill());
+  toggleContinentKey();
   createCircles();
   createForces();
   createForceSimulation();
@@ -43,7 +43,7 @@ function createBubbleChart(error, entries) {
         .attr("height", height);
   }
 
-  function toggleContinentKey(showContinentKey) {
+  function toggleContinentKey() {
     var keyElementWidth = 150,
         keyElementHeight = 30;
     var onScreenYOffset = keyElementHeight*1.5,
@@ -54,11 +54,7 @@ function createBubbleChart(error, entries) {
     }
     var continentKey = d3.select(".continent-key");
 
-    if (showContinentKey) {
-      translateContinentKey("translate(0," + (height - onScreenYOffset) + ")");
-    } else {
-      translateContinentKey("translate(0," + (height + offScreenYOffset) + ")");
-    }
+    translateContinentKey("translate(0," + (height - onScreenYOffset) + ")");
 
     function createContinentKey() {
       var keyWidth = keyElementWidth * groups.values().length;
@@ -106,10 +102,6 @@ function createBubbleChart(error, entries) {
     }
   }
 
-  function flagFill() {
-    return isChecked("#flags");
-  }
-
   function isChecked(elementID) {
     return d3.select(elementID).property("checked");
   }
@@ -141,7 +133,7 @@ function createBubbleChart(error, entries) {
   function updateCircles() {
     circles
       .attr("fill", function(d) {
-        return flagFill() ? "url(#" + d[mainKey] + ")" : groupColorScale(d[mainKey]);
+        return groupColorScale(d[mainKey]);
       });
   }
 
@@ -269,7 +261,7 @@ function createBubbleChart(error, entries) {
   function addFillListener() {
     d3.selectAll('input[name="fill"]')
       .on("change", function() {
-        toggleContinentKey(!flagFill() && !lengthGrouping());
+        toggleContinentKey(!lengthGrouping());
         updateCircles();
       });
   }
@@ -282,7 +274,7 @@ function createBubbleChart(error, entries) {
     function addListener(selector, forces) {
       d3.select(selector).on("click", function() {
         updateForces(forces);
-        toggleContinentKey(!flagFill() && !lengthGrouping());
+        toggleContinentKey(!lengthGrouping());
         toggleLengthAxes(lengthGrouping());
       });
     }
