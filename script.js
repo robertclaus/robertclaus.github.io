@@ -7,6 +7,7 @@ function createBubbleChart(error, entries) {
 
   var mainKey = "groupID";
   var secondaryKey = "topicID";
+  var titleKey = "commentText";
 
   var groups = d3.set(entries.map(function(entry) { return entry[mainKey]; }));
   var groupDomain = groups.values();
@@ -131,7 +132,7 @@ function createBubbleChart(error, entries) {
     function updateCountryInfo(country) {
       var info = "";
       if (country) {
-        info = [country.CountryName, formatLength(country.chars_total)].join(": ");
+        info = [country[titleKey], formatLength(country.chars_total)].join(": ");
       }
       d3.select("#country-info").html(info);
     }
@@ -149,7 +150,6 @@ function createBubbleChart(error, entries) {
 
     forces = {
       combine:        createCombineForces(),
-      countryCenters: createCountryCenterForces(),
       continent:      createContinentForces(),
       length:     createLengthForces()
     };
@@ -158,23 +158,6 @@ function createBubbleChart(error, entries) {
       return {
         x: d3.forceX(width / 2).strength(forceStrength),
         y: d3.forceY(height / 2).strength(forceStrength)
-      };
-    }
-
-    function createCountryCenterForces() {
-      var projectionStretchY = 0.25,
-          projectionMargin = circleSize.max,
-          projection = d3.geoEquirectangular()
-            .scale((width / 2 - projectionMargin) / Math.PI)
-            .translate([width / 2, height * (1 - projectionStretchY) / 2]);
-
-      return {
-        x: d3.forceX(function(d) {
-            return projection([d.CenterLongitude, d.CenterLatitude])[0];
-          }).strength(forceStrength),
-        y: d3.forceY(function(d) {
-            return projection([d.CenterLongitude, d.CenterLatitude])[1] * (1 + projectionStretchY);
-          }).strength(forceStrength)
       };
     }
 
@@ -297,7 +280,6 @@ function createBubbleChart(error, entries) {
 
   function addGroupingListeners() {
     addListener("#combine",         forces.combine);
-    addListener("#country-centers", forces.countryCenters);
     addListener("#groups",      forces.continent);
     addListener("#total_chars",      forces.length);
 
