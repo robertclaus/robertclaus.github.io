@@ -7,7 +7,7 @@ function createBubbleChart(error, entries) {
 
   var mainKey = "groupID";
   var secondaryKey = "topicID";
-  var titleKey = "commentText";
+  var titleKey = "groupID";
 
   var groups = d3.set(entries.map(function(entry) { return entry[mainKey]; }));
   var groupDomain = groups.values();
