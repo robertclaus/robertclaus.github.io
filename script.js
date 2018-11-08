@@ -34,7 +34,6 @@ function createBubbleChart(error, entries) {
   createCircles();
   createForces();
   createForceSimulation();
-  addFlagDefinitions();
   addFillListener();
   addGroupingListeners();
 
@@ -144,7 +143,7 @@ function createBubbleChart(error, entries) {
 
     forces = {
       combine:        createCombineForces(),
-      continent:      createContinentForces(),
+      continent:      createGroupedForces(),
       length:     createLengthForces()
     };
 
@@ -155,7 +154,7 @@ function createBubbleChart(error, entries) {
       };
     }
 
-    function createContinentForces() {
+    function createGroupedForces() {
       return {
         x: d3.forceX(continentForceX).strength(forceStrength),
         y: d3.forceY(continentForceY).strength(forceStrength)
@@ -171,7 +170,7 @@ function createBubbleChart(error, entries) {
           var rowCount = Math.floor(groupIndex/rowLength);
           var columnCount = groupCount - (rowCount*rowLength);
 
-          return (dimension/rowLength)*rowCount;
+          return (width/rowLength)*rowCount;
       }
 
       function continentForceY(d) {
@@ -184,7 +183,7 @@ function createBubbleChart(error, entries) {
           var rowCount = Math.floor(groupIndex/rowLength);
           var columnCount = groupCount - (rowCount*rowLength);
 
-          return (dimension/columnLength)*columnCount;
+          return (width/columnLength)*columnCount;
       }
     }
 
@@ -228,30 +227,12 @@ function createBubbleChart(error, entries) {
     return lengthGrouping() ? 0 : circleRadiusScale(d.chars_total) + 1;
   }
 
+
+
+
+
   function lengthGrouping() {
     return isChecked("#total_chars");
-  }
-
-  function addFlagDefinitions() {
-    var defs = svg.append("defs");
-    defs.selectAll(".flag")
-      .data(entries)
-      .enter()
-        .append("pattern")
-        .attr("id", function(d) { return d[mainKey]; })
-        .attr("class", "flag")
-        .attr("width", "100%")
-        .attr("height", "100%")
-        .attr("patternContentUnits", "objectBoundingBox")
-          .append("image")
-          .attr("width", 1)
-          .attr("height", 1)
-          // xMidYMid: center the image in the circle
-          // slice: scale the image to fill the circle
-          .attr("preserveAspectRatio", "xMidYMid slice")
-          .attr("xlink:href", function(d) {
-            return "flags/" + d[mainKey] + ".svg";
-          });
   }
 
   function addFillListener() {
@@ -283,6 +264,13 @@ function createBubbleChart(error, entries) {
         .alphaTarget(0.5)
         .restart();
     }
+
+
+
+
+
+
+
 
     function toggleLengthAxes(showAxes) {
       var onScreenXOffset = 40,
