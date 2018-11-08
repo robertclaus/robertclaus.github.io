@@ -11,8 +11,8 @@ function createBubbleChart(error, entries) {
       lengthScaleX,
       lengthScaleY;
 
-  var mainKey = "groupID";
-  var secondaryKey = "topicID";
+  var mainKey = "topicID";
+  var secondaryKey = "groupID";
   var titleKey = "groupID";
   var responseCountKey = "numChildren"
 
@@ -137,8 +137,8 @@ function createBubbleChart(error, entries) {
 
     function updateCountryInfo(country) {
       var info = "";
-      if (country) {
-        info = [country[titleKey], formatLength(country.chars_total)].join(": ");
+      if (elem) {
+        info = "Group: {} \nTopic: {} \nLength: {} \nNumber of Children: {}".format(elem[secondaryKey], elem[mainKey], elem['chars_total'], elem[responseCountKey]);
       }
       d3.select("#country-info").html(info);
     }
