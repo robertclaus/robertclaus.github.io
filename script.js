@@ -12,6 +12,7 @@ function createBubbleChart(error, entries) {
   var mainKey = "groupID";
   var secondaryKey = "topicID";
   var titleKey = "groupID";
+  var responseCountKey = "numChildren"
 
   var groups = d3.set(entries.map(function(entry) { return entry[mainKey]; }));
   groupDomain = groups.values();
@@ -183,7 +184,7 @@ function createBubbleChart(error, entries) {
 
           var groupIndex = groupDomain.indexOf(d[mainKey]);
 
-          var rowCount = Math.floor(groupIndex/rowLength);
+          var rowCount = Math.floor(groupIndex%rowLength);
           var columnCount = groupCount - (rowCount*rowLength);
 
           return (height/columnLength)*columnCount;
