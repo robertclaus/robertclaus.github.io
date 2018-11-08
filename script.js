@@ -1,4 +1,5 @@
 var groupDomain;
+var topicDomain;
 var width;
 var height;
 
@@ -16,6 +17,10 @@ function createBubbleChart(error, entries) {
 
   var groups = d3.set(entries.map(function(entry) { return entry[mainKey]; }));
   groupDomain = groups.values();
+
+    var topics = d3.set(entries.map(function(entry) { return entry[secondaryKey]; }));
+    topicDomain = topics.values();
+
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10)
         .domain(groupDomain);
 
@@ -147,7 +152,8 @@ function createBubbleChart(error, entries) {
 
     forces = {
       combine:        createCombineForces(),
-      continent:      createGroupedForces(),
+      group:      createGroupedForces(),
+      topic:      createTopicForces(),
       length:     createLengthForces()
     };
 
@@ -193,6 +199,42 @@ function createBubbleChart(error, entries) {
           return (perColumnHeight/2) + perColumnHeight*columnCount;//(height/columnLength)*columnCount;
       }
     }
+
+        function createTopicForces() {
+          return {
+            x: d3.forceX(topicForceX).strength(forceStrength),
+            y: d3.forceY(topicForceY).strength(forceStrength)
+          };
+
+          function topicForceX(d) {
+              var groupCount = topicDomain.length;
+              var rowLength = Math.ceil(Math.sqrt(groupCount));
+              var columnLength = Math.ceil(groupCount/rowLength);
+
+              var groupIndex = groupDomain.indexOf(d[secondaryKey]);
+
+              var rowCount = Math.floor(groupIndex%rowLength);
+
+              var perGroupWidth = width/rowLength;
+
+              return (perGroupWidth/2) + perGroupWidth*rowCount;
+          }
+
+          function topicForceY(d) {
+              var groupCount = topicDomain.length;
+              var rowLength = Math.ceil(Math.sqrt(groupCount));
+              var columnLength = Math.ceil(groupCount/rowLength);
+
+              var groupIndex = groupDomain.indexOf(d[secondaryKey]);
+
+              var rowCount = Math.floor(groupIndex%rowLength);
+              var columnCount = Math.floor((groupIndex - (rowCount*rowLength))%columnLength);
+
+              var perColumnHeight = height/columnLength;
+
+              return (perColumnHeight/2) + perColumnHeight*columnCount;//(height/columnLength)*columnCount;
+          }
+        }
 
     function createLengthForces() {
       var scaledLengthMargin = circleSize.max;
@@ -252,7 +294,8 @@ function createBubbleChart(error, entries) {
 
   function addGroupingListeners() {
     addListener("#combine", forces.combine);
-    addListener("#groups", forces.continent);
+    addListener("#groups", forces.group);
+    addListener("#topic", forces.topic);
     addListener("#total_chars", forces.length);
     addListener("#response_count", forces.response_count)
 
