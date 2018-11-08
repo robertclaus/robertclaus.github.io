@@ -317,7 +317,7 @@ circleRadiusScale = d3.scaleSqrt()
 
 
 
-
+currentForces = forces.combine;
 
 d3.select("#scale").on("change",function(){
 scale = document.getElementById("scale").value;
