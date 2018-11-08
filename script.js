@@ -172,9 +172,10 @@ function createBubbleChart(error, entries) {
           var groupIndex = groupDomain.indexOf(d[mainKey]);
 
           var rowCount = Math.floor(groupIndex%rowLength);
-          var columnCount = groupCount - (rowCount*rowLength);
 
-          return (width/rowLength)*rowCount;
+          var perGroupWidth = width/rowLength;
+
+          return (perGroupWidth/2) + perGroupWidth*rowCount;
       }
 
       function groupForceY(d) {
