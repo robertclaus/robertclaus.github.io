@@ -171,32 +171,11 @@ function createBubbleChart(error, entries) {
       };
 
       function groupForceX(d) {
-          var groupCount = groupDomain.length;
-          var rowLength = Math.ceil(Math.sqrt(groupCount));
-          var columnLength = Math.ceil(groupCount/rowLength);
-
-          var groupIndex = groupDomain.indexOf(d[mainKey]);
-
-          var rowCount = Math.floor(groupIndex%rowLength);
-
-          var perGroupWidth = width/rowLength;
-
-          return (perGroupWidth/2) + perGroupWidth*rowCount;
+          return seperateForce(d, groupDomain, mainKey, true);
       }
 
       function groupForceY(d) {
-          var groupCount = groupDomain.length;
-          var rowLength = Math.ceil(Math.sqrt(groupCount));
-          var columnLength = Math.ceil(groupCount/rowLength);
-
-          var groupIndex = groupDomain.indexOf(d[mainKey]);
-
-          var rowCount = Math.floor(groupIndex%rowLength);
-          var columnCount = Math.floor(groupIndex - ((rowCount*rowLength)%columnLength));
-
-          var perColumnHeight = height/columnLength;
-
-          return (perColumnHeight/2) + perColumnHeight*columnCount;//(height/columnLength)*columnCount;
+          return seperateForce(d, groupDomain, mainKey, false);
       }
     }
 
@@ -207,15 +186,15 @@ function createBubbleChart(error, entries) {
           };
 
           function topicForceX(d) {
-              seperateForce(topicDomain, secondaryKey, true);
+              return seperateForce(d, topicDomain, secondaryKey, true);
           }
 
           function topicForceY(d) {
-                seperateForce(topicDomain, secondaryKey, false);
+                return seperateForce(d, topicDomain, secondaryKey, false);
           }
         }
 
-        function seperateForce(domain, key, isX) {
+        function seperateForce(d, domain, key, isX) {
           var groupCount = domain.length;
           var rowLength = Math.ceil(Math.sqrt(groupCount));
           var columnLength = Math.ceil(groupCount/rowLength);
