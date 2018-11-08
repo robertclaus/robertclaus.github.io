@@ -135,10 +135,10 @@ function createBubbleChart(error, entries) {
         });
     updateCircles();
 
-    function updateCountryInfo(country) {
+    function updateCountryInfo(elem) {
       var info = "";
       if (elem) {
-        info = "Group: {} \nTopic: {} \nLength: {} \nNumber of Children: {}".format(elem[groupKey], elem[topicKey], elem['chars_total'], elem[responseCountKey]);
+        info = ["Group: ",elem[groupKey],"<br>Topic: ",elem[topicKey], "<br>Length: ", elem['chars_total'], "<br>Number of Children: ", elem[responseCountKey]].join("");
       }
       d3.select("#country-info").html(info);
     }
