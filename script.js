@@ -11,15 +11,14 @@ function createBubbleChart(error, entries) {
       lengthScaleX,
       lengthScaleY;
 
-  var mainKey = "topicID";
-  var secondaryKey = "groupID";
-  var titleKey = "groupID";
+  var topicKey = "topicID";
+  var groupKey = "groupID";
   var responseCountKey = "numChildren"
 
-  var groups = d3.set(entries.map(function(entry) { return entry[mainKey]; }));
+  var groups = d3.set(entries.map(function(entry) { return entry[topicKey]; }));
   groupDomain = groups.values();
 
-    var topics = d3.set(entries.map(function(entry) { return entry[secondaryKey]; }));
+    var topics = d3.set(entries.map(function(entry) { return entry[groupKey]; }));
     topicDomain = topics.values();
 
         var users = d3.set(entries.map(function(entry) { return entry["user"]; }));
@@ -138,7 +137,7 @@ function createBubbleChart(error, entries) {
     function updateCountryInfo(country) {
       var info = "";
       if (elem) {
-        info = "Group: {} \nTopic: {} \nLength: {} \nNumber of Children: {}".format(elem[secondaryKey], elem[mainKey], elem['chars_total'], elem[responseCountKey]);
+        info = "Group: {} \nTopic: {} \nLength: {} \nNumber of Children: {}".format(elem[groupKey], elem[topicKey], elem['chars_total'], elem[responseCountKey]);
       }
       d3.select("#country-info").html(info);
     }
@@ -147,7 +146,7 @@ function createBubbleChart(error, entries) {
   function updateCircles() {
     circles
       .attr("fill", function(d) {
-        return groupColorScale(d[mainKey]);
+        return groupColorScale(d[topicKey]);
       });
   }
 
@@ -186,11 +185,11 @@ function createBubbleChart(error, entries) {
       };
 
       function groupForceX(d) {
-          return seperateForce(d, groupDomain, mainKey, true);
+          return seperateForce(d, groupDomain, groupKey, true);
       }
 
       function groupForceY(d) {
-          return seperateForce(d, groupDomain, mainKey, false);
+          return seperateForce(d, groupDomain, groupKey, false);
       }
     }
 
@@ -201,11 +200,11 @@ function createBubbleChart(error, entries) {
           };
 
           function topicForceX(d) {
-              return seperateForce(d, topicDomain, secondaryKey, true);
+              return seperateForce(d, topicDomain, topicKey, true);
           }
 
           function topicForceY(d) {
-                return seperateForce(d, topicDomain, secondaryKey, false);
+                return seperateForce(d, topicDomain, topicKey, false);
           }
 
         }
@@ -257,7 +256,7 @@ function createBubbleChart(error, entries) {
       var centerCirclesInScaleBandOffset = lengthScaleX.bandwidth() / 2;
       return {
         x: d3.forceX(function(d) {
-            return lengthScaleX(d[mainKey]) + centerCirclesInScaleBandOffset;
+            return lengthScaleX(d[topicKey]) + centerCirclesInScaleBandOffset;
           }).strength(forceStrength),
         y: d3.forceY(function(d) {
           return lengthScaleY(d.chars_total);
