@@ -207,32 +207,30 @@ function createBubbleChart(error, entries) {
           };
 
           function topicForceX(d) {
-              var groupCount = topicDomain.length;
-              var rowLength = Math.ceil(Math.sqrt(groupCount));
-              var columnLength = Math.ceil(groupCount/rowLength);
-
-              var groupIndex = topicDomain.indexOf(d[secondaryKey]);
-
-              var rowCount = Math.floor(groupIndex%rowLength);
-
-              var perGroupWidth = width/rowLength;
-
-              return (perGroupWidth/2) + perGroupWidth*rowCount;
+              seperateForce(topicDomain, secondaryKey, true);
           }
 
           function topicForceY(d) {
-              var groupCount = topicDomain.length;
-              var rowLength = Math.ceil(Math.sqrt(groupCount));
-              var columnLength = Math.ceil(groupCount/rowLength);
+                seperateForce(topicDomain, secondaryKey, false);
+          }
+        }
 
-              var groupIndex = topicDomain.indexOf(d[secondaryKey]);
+        function seperateForce(domain, key, isX) {
+          var groupCount = domain.length;
+          var rowLength = Math.ceil(Math.sqrt(groupCount));
+          var columnLength = Math.ceil(groupCount/rowLength);
 
-              var rowCount = Math.floor(groupIndex%rowLength);
-              var columnCount = (rowCount*rowLength - groupIndex);
+          var groupIndex = domain.indexOf(d[key]);
 
-              var perColumnHeight = height/columnLength;
+          var rowCount = Math.floor(groupIndex/rowLength);
+          var columnCount = (groupIndex%columnLength);
 
-              return (perColumnHeight/2) + perColumnHeight*columnCount;//(height/columnLength)*columnCount;
+          if(isX){
+                    var perGroupWidth = width/rowLength;
+                    return (perGroupWidth/2) + perGroupWidth*rowCount;
+          } else {
+                    var perColumnHeight = height/columnLength;
+                    return (perColumnHeight/2) + perColumnHeight*columnCount;
           }
         }
 
