@@ -4,6 +4,15 @@ var userDomain;
 var width;
 var height;
 var scale = 100;
+var svg,
+      circles,
+      circleSize = { min: 10, max: 80 };
+
+
+  var circleRadiusScale;
+
+
+ var currentForces;
 
 function createBubbleChart(error, entries) {
   var length = entries.map(function(entry) { return +entry.chars_total; });
@@ -32,10 +41,7 @@ function createBubbleChart(error, entries) {
   width = 1200,
   height = 800;
 
-  var svg,
-      circles,
-      circleSize = { min: 10, max: 80 };
-  var circleRadiusScale = d3.scaleSqrt()
+circleRadiusScale = d3.scaleSqrt()
     .domain(lengthExtent)
     .range([circleSize.min, circleSize.max]);
 
@@ -126,7 +132,7 @@ function createBubbleChart(error, entries) {
       .data(entries)
       .enter()
         .append("circle")
-        .attr("r", function(d) { return circleRadiusScale(d.chars_total * (scale/100)); })
+        .attr("r", function(d) { return circleRadiusScale(d.chars_total); })
         .on("mouseover", function(d) {
           updateCountryInfo(d);
         })
@@ -285,7 +291,7 @@ function createBubbleChart(error, entries) {
   }
 
   function forceCollide(d) {
-    return lengthGrouping() ? 0 : circleRadiusScale(d.chars_total) + 1;
+    return lengthGrouping() ? 0 : circleRadiusScale(d.chars_total * (scale/100)) + 1;
   }
 
     function updateForces(forces) {
@@ -315,7 +321,8 @@ function createBubbleChart(error, entries) {
 
 d3.select("#scale").on("change",function(){
 scale = document.getElementById("scale").value;
-createCircles();
+circles.attr("r", function(d) { return circleRadiusScale(d.chars_total * (scale/100)); });
+updateForces(currentForces);
 });
 
   function lengthGrouping() {
@@ -340,6 +347,7 @@ createCircles();
 
     function addListener(selector, forces) {
       d3.select(selector).on("click", function() {
+        currentForces = forces;
         updateForces(forces);
         toggleContinentKey(!lengthGrouping());
         toggleLengthAxes(lengthGrouping());
