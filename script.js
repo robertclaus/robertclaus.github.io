@@ -1,4 +1,6 @@
 var groupDomain;
+var width;
+var height;
 
 function createBubbleChart(error, entries) {
   var length = entries.map(function(entry) { return +entry.chars_total; });
@@ -17,8 +19,9 @@ function createBubbleChart(error, entries) {
         .domain(groupDomain);
 
 
-  var width = 1200,
-      height = 800;
+  width = 1200,
+  height = 800;
+
   var svg,
       circles,
       circleSize = { min: 10, max: 80 };
@@ -167,7 +170,7 @@ function createBubbleChart(error, entries) {
 
           var groupIndex = groupDomain.indexOf(d[mainKey]);
 
-          var rowCount = Math.floor(groupIndex/rowLength);
+          var rowCount = Math.floor(groupIndex%rowLength);
           var columnCount = groupCount - (rowCount*rowLength);
 
           return (width/rowLength)*rowCount;
@@ -244,9 +247,10 @@ function createBubbleChart(error, entries) {
   }
 
   function addGroupingListeners() {
-    addListener("#combine",         forces.combine);
-    addListener("#groups",      forces.continent);
-    addListener("#total_chars",      forces.length);
+    addListener("#combine", forces.combine);
+    addListener("#groups", forces.continent);
+    addListener("#total_chars", forces.length);
+    addListener("#response_count", forces.response_count)
 
     function addListener(selector, forces) {
       d3.select(selector).on("click", function() {
