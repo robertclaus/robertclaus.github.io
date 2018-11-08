@@ -211,7 +211,7 @@ function createBubbleChart(error, entries) {
               var rowLength = Math.ceil(Math.sqrt(groupCount));
               var columnLength = Math.ceil(groupCount/rowLength);
 
-              var groupIndex = groupDomain.indexOf(d[secondaryKey]);
+              var groupIndex = topicDomain.indexOf(d[secondaryKey]);
 
               var rowCount = Math.floor(groupIndex%rowLength);
 
@@ -225,7 +225,7 @@ function createBubbleChart(error, entries) {
               var rowLength = Math.ceil(Math.sqrt(groupCount));
               var columnLength = Math.ceil(groupCount/rowLength);
 
-              var groupIndex = groupDomain.indexOf(d[secondaryKey]);
+              var groupIndex = topicDomain.indexOf(d[secondaryKey]);
 
               var rowCount = Math.floor(groupIndex%rowLength);
               var columnCount = Math.floor((groupIndex - (rowCount*rowLength))%columnLength);
