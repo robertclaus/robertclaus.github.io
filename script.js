@@ -156,11 +156,11 @@ function createBubbleChart(error, entries) {
 
     function createGroupedForces() {
       return {
-        x: d3.forceX(continentForceX).strength(forceStrength),
-        y: d3.forceY(continentForceY).strength(forceStrength)
+        x: d3.forceX(groupForceX).strength(forceStrength),
+        y: d3.forceY(groupForceY).strength(forceStrength)
       };
 
-      function continentForceX(d) {
+      function groupForceX(d) {
           var groupCount = groupDomain.length;
           var rowLength = Math.ceil(Math.sqrt(groupCount));
           var columnLength = Math.ceil(groupCount/rowLength);
@@ -173,7 +173,7 @@ function createBubbleChart(error, entries) {
           return (width/rowLength)*rowCount;
       }
 
-      function continentForceY(d) {
+      function groupForceY(d) {
           var groupCount = groupDomain.length;
           var rowLength = Math.ceil(Math.sqrt(groupCount));
           var columnLength = Math.ceil(groupCount/rowLength);
@@ -183,7 +183,7 @@ function createBubbleChart(error, entries) {
           var rowCount = Math.floor(groupIndex/rowLength);
           var columnCount = groupCount - (rowCount*rowLength);
 
-          return (width/columnLength)*columnCount;
+          return (height/columnLength)*columnCount;
       }
     }
 
