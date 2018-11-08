@@ -3,6 +3,7 @@ var topicDomain;
 var userDomain;
 var width;
 var height;
+var scale = 100;
 
 function createBubbleChart(error, entries) {
   var length = entries.map(function(entry) { return +entry.chars_total; });
@@ -125,7 +126,7 @@ function createBubbleChart(error, entries) {
       .data(entries)
       .enter()
         .append("circle")
-        .attr("r", function(d) { return circleRadiusScale(d.chars_total * ($("#scale").value/100)); })
+        .attr("r", function(d) { return circleRadiusScale(d.chars_total * (scale/100)); })
         .on("mouseover", function(d) {
           updateCountryInfo(d);
         })
@@ -243,6 +244,10 @@ function createBubbleChart(error, entries) {
           }
         }
 
+
+
+
+3
     function createLengthForces() {
       var scaledLengthMargin = circleSize.max;
 
@@ -308,7 +313,10 @@ function createBubbleChart(error, entries) {
 
 
 
-
+d3.select("#scale").on("change",function(){
+scale = document.getElementById("scale").value;
+createCircles();
+});
 
   function lengthGrouping() {
     return isChecked("#total_chars");
