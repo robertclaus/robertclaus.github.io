@@ -187,7 +187,7 @@ function createBubbleChart(error, entries) {
           var rowCount = Math.floor(groupIndex%rowLength);
           var columnCount = groupCount - (rowCount*rowLength);
 
-          return (height/columnLength)*columnCount;
+          return 100;//(height/columnLength)*columnCount;
       }
     }
 
