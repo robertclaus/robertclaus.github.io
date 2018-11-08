@@ -296,6 +296,21 @@ function createBubbleChart(error, entries) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   function lengthGrouping() {
     return isChecked("#total_chars");
   }
