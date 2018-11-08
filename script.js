@@ -228,7 +228,7 @@ function createBubbleChart(error, entries) {
               var groupIndex = topicDomain.indexOf(d[secondaryKey]);
 
               var rowCount = Math.floor(groupIndex%rowLength);
-              var columnCount = Math.floor(groupIndex - ((rowCount*rowLength)%columnLength));
+              var columnCount = Math.floor((rowCount*rowLength)%columnLength);
 
               var perColumnHeight = height/columnLength;
 
