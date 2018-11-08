@@ -125,7 +125,7 @@ function createBubbleChart(error, entries) {
       .data(entries)
       .enter()
         .append("circle")
-        .attr("r", function(d) { return circleRadiusScale(d.chars_total); })
+        .attr("r", function(d) { return circleRadiusScale(int(d.chars_total) * ($("#scale").value/100)); })
         .on("mouseover", function(d) {
           updateCountryInfo(d);
         })
