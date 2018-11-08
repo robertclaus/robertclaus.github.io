@@ -1,3 +1,5 @@
+var groupDomain;
+
 function createBubbleChart(error, entries) {
   var length = entries.map(function(entry) { return +entry.chars_total; });
   var meanPopulation = d3.mean(length),
@@ -10,7 +12,7 @@ function createBubbleChart(error, entries) {
   var titleKey = "groupID";
 
   var groups = d3.set(entries.map(function(entry) { return entry[mainKey]; }));
-  var groupDomain = groups.values();
+  groupDomain = groups.values();
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10)
         .domain(groupDomain);
 
@@ -160,36 +162,30 @@ function createBubbleChart(error, entries) {
       };
 
       function continentForceX(d) {
-        if (d[mainKey] === "EU") {
-          return left(width);
-        } else if (d[mainKey] === "AF") {
-          return left(width);
-        } else if (d[mainKey] === "AS") {
-          return right(width);
-        } else if (d[mainKey] === "NA" || d[mainKey] === "SA") {
-          return right(width);
-        }
-        return center(width);
+          var groupCount = groupDomain.length;
+          var rowLength = Math.ceil(Math.sqrt(groupCount));
+          var columnLength = Math.ceil(groupCount/rowLength);
+
+          var groupIndex = groupDomain.indexOf(d[mainKey]);
+
+          var rowCount = Math.floor(groupIndex/rowLength);
+          var columnCount = groupCount - (rowCount*rowLength);
+
+          return (dimension/rowLength)*rowCount;
       }
 
       function continentForceY(d) {
-        if (d[mainKey] === "EU") {
-          return top(height);
-        } else if (d[mainKey] === "AF") {
-          return bottom(height);
-        } else if (d[mainKey] === "AS") {
-          return top(height);
-        } else if (d[mainKey] === "NA" || d[mainKey] === "SA") {
-          return bottom(height);
-        }
-        return center(height);
-      }
+          var groupCount = groupDomain.length;
+          var rowLength = Math.ceil(Math.sqrt(groupCount));
+          var columnLength = Math.ceil(groupCount/rowLength);
 
-      function left(dimension) { return dimension / 4; }
-      function center(dimension) { return dimension / 2; }
-      function right(dimension) { return dimension / 4 * 3; }
-      function top(dimension) { return dimension / 4; }
-      function bottom(dimension) { return dimension / 4 * 3; }
+          var groupIndex = groupDomain.indexOf(d[mainKey]);
+
+          var rowCount = Math.floor(groupIndex/rowLength);
+          var columnCount = groupCount - (rowCount*rowLength);
+
+          return (dimension/columnLength)*columnCount;
+      }
     }
 
     function createLengthForces() {
