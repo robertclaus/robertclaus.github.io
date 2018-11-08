@@ -16,10 +16,10 @@ function createBubbleChart(error, entries) {
   var groupKey = "groupID";
   var responseCountKey = "numChildren"
 
-  var groups = d3.set(entries.map(function(entry) { return entry[topicKey]; }));
+  var groups = d3.set(entries.map(function(entry) { return entry[groupKey]; }));
   groupDomain = groups.values();
 
-    var topics = d3.set(entries.map(function(entry) { return entry[groupKey]; }));
+    var topics = d3.set(entries.map(function(entry) { return entry[topicKey]; }));
     topicDomain = topics.values();
 
         var users = d3.set(entries.map(function(entry) { return entry["user"]; }));
