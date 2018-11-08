@@ -1,5 +1,6 @@
 var groupDomain;
 var topicDomain;
+var userDomain;
 var width;
 var height;
 
@@ -20,6 +21,9 @@ function createBubbleChart(error, entries) {
 
     var topics = d3.set(entries.map(function(entry) { return entry[secondaryKey]; }));
     topicDomain = topics.values();
+
+        var users = d3.set(entries.map(function(entry) { return entry["user"]; }));
+        userDomain = users.values();
 
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10)
         .domain(groupDomain);
@@ -147,6 +151,16 @@ function createBubbleChart(error, entries) {
       });
   }
 
+
+
+
+
+
+
+
+
+/* Forces */
+
   function createForces() {
     var forceStrength = 0.05;
 
@@ -154,6 +168,7 @@ function createBubbleChart(error, entries) {
       combine:        createCombineForces(),
       group:      createGroupedForces(),
       topic:      createTopicForces(),
+      user:         createUserForces(),
       length:     createLengthForces()
     };
 
@@ -192,7 +207,23 @@ function createBubbleChart(error, entries) {
           function topicForceY(d) {
                 return seperateForce(d, topicDomain, secondaryKey, false);
           }
+
         }
+
+         function createUserForces() {
+                  return {
+                    x: d3.forceX(userForceX).strength(forceStrength),
+                    y: d3.forceY(userForceY).strength(forceStrength)
+                  };
+
+                  function userForceX(d) {
+                      return seperateForce(d, userDomain, "user", true);
+                  }
+
+                  function userForceY(d) {
+                        return seperateForce(d, userDomain, "user", false);
+                  }
+                }
 
         function seperateForce(d, domain, key, isX) {
           var groupCount = domain.length;
@@ -253,6 +284,14 @@ function createBubbleChart(error, entries) {
     return lengthGrouping() ? 0 : circleRadiusScale(d.chars_total) + 1;
   }
 
+    function updateForces(forces) {
+      forceSimulation
+        .force("x", forces.x)
+        .force("y", forces.y)
+        .force("collide", d3.forceCollide(forceCollide))
+        .alphaTarget(0.5)
+        .restart();
+    }
 
 
 
@@ -273,6 +312,7 @@ function createBubbleChart(error, entries) {
     addListener("#combine", forces.combine);
     addListener("#groups", forces.group);
     addListener("#topic", forces.topic);
+    addListener("#user", forces.user);
     addListener("#total_chars", forces.length);
     addListener("#response_count", forces.response_count)
 
@@ -283,22 +323,6 @@ function createBubbleChart(error, entries) {
         toggleLengthAxes(lengthGrouping());
       });
     }
-
-    function updateForces(forces) {
-      forceSimulation
-        .force("x", forces.x)
-        .force("y", forces.y)
-        .force("collide", d3.forceCollide(forceCollide))
-        .alphaTarget(0.5)
-        .restart();
-    }
-
-
-
-
-
-
-
 
     function toggleLengthAxes(showAxes) {
       var onScreenXOffset = 40,
