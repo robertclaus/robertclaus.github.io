@@ -233,7 +233,7 @@ function createBubbleChart(error, entries) {
           var groupIndex = domain.indexOf(d[key]);
 
           var columnCount = Math.floor(groupIndex/rowLength);
-          var rowCount = (groupIndex%columnLength);
+          var rowCount = (groupIndex%rowLength);
 
           if(isX){
                     var perGroupWidth = width/rowLength;
