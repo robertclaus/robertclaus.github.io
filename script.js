@@ -7,7 +7,7 @@ var timeDomain;
 
 var width;
 var height;
-var scale = 100;
+var scale = 5;
 var svg,
       circles,
       circleSize = { min: 10, max: 80 };
@@ -32,7 +32,9 @@ function createBubbleChart(error, entries) {
 
   entries.forEach(function(d) {
       d[timeKey] = new Date(Date.parse(d[timeKey]));
+      d[responseCountKey] = parseInt(d[responseCountKey]);
   });
+
 
   var groups = d3.set(entries.map(function(entry) { return entry[groupKey]; }));
   groupDomain = groups.values();
@@ -43,10 +45,9 @@ function createBubbleChart(error, entries) {
     var users = d3.set(entries.map(function(entry) { return entry["user"]; }));
     userDomain = users.values();
 
-    var responses = d3.set(entries.map(function(entry) { return entry[responseCountKey]; }));
-    responseDomain = responses.values();
+    responseDomain = entries.map(function(entry) { return entry[responseCountKey]; }).sort(function(a,b){ return a-b;});;
 
-    timeDomain = entries.map(function(entry) { return entry[timeKey]; });
+    timeDomain = entries.map(function(entry) { return entry[timeKey]; }).sort(function(a,b){ return a-b;});;
 
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(topicDomain);
 
@@ -271,12 +272,15 @@ circleRadiusScale = d3.scaleSqrt()
     function createOverTimeForces() {
       var scaledLengthMargin = 100;
 
+      var startDate = timeDomain[0];
+      var endDate = timeDomain[timeDomain.length -1];
+
       lengthScaleX = d3.scaleTime()
-        .domain(timeDomain)
-        .range([150, 300]);
+        .domain([endDate, startDate])
+        .range([scaledLengthMargin, width-scaledLengthMargin]);
       lengthScaleY = d3.scaleLinear()
-        .domain(responseDomain)
-        .range([350, 950]);
+        .domain([responseDomain[0], responseDomain[responseDomain.length-1]])
+        .range([scaledLengthMargin, height-scaledLengthMargin]);
 
       return {
         x: d3.forceX(function(d) {
