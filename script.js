@@ -282,11 +282,9 @@ circleRadiusScale = d3.scaleSqrt()
         .domain(responseDomain)
         .range([0, scaledLengthMargin*2]);
 
-      var centerCirclesInScaleBandOffset = lengthScaleX.bandwidth() / 2;
-
       return {
         x: d3.forceX(function(d) {
-            return lengthScaleX(d[timeKey]) + centerCirclesInScaleBandOffset;
+            return lengthScaleX(d[timeKey]);
           }).strength(forceStrength),
         y: d3.forceY(function(d) {
           return lengthScaleY(d[responseCountKey]);
