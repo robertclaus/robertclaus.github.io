@@ -204,7 +204,7 @@ circleRadiusScale = d3.scaleSqrt()
       topic:      createTopicForces(),
       user:         createUserForces(),
       over_time:     createOverTimeForces(),
-      over_time_size: createOverTimeSizeForceS()
+      over_time_size: createOverTimeSizeForces()
     };
 
     function createCombineForces() {
@@ -436,7 +436,7 @@ d3.select("#scale").on("change",function(){
         var numberOfTicks = 10,
             tickFormat = ".0s";
 
-        var xAxis = d3.axisBottom(lengthScaleX)
+        var xAxis = d3.axisBottom(lengthScaleX);
           //.ticks(numberOfTicks, tickFormat);
 
         svg.append("g")
@@ -446,7 +446,7 @@ d3.select("#scale").on("change",function(){
           .selectAll(".tick text")
             .attr("font-size", "16px");
 
-        var yAxis = d3.axisLeft(lengthScaleY)
+        var yAxis = d3.axisLeft(lengthScaleY);
           //.ticks(numberOfTicks, tickFormat);
         svg.append("g")
           .attr("class", "y-axis")
