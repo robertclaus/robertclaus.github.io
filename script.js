@@ -51,7 +51,7 @@ function createBubbleChart(error, entries) {
 
     responseDomain = entries.map(function(entry) { return entry[responseCountKey]; }).sort(function(a,b){ return b-a;});;
 
-    timeDomain = entries.map(function(entry) { return entry[timeKey]; }).sort(function(a,b){ return a-b;});;
+    timeDomain = entries.map(function(entry) { return entry[timeKey]; }).sort(function(a,b){ return b-a;});;
 
     lengthDomain = entries.map(function(entry) { return entry[lengthKey]; }).sort(function(a,b){ return b-a;});;
 
@@ -196,7 +196,7 @@ circleRadiusScale = d3.scaleSqrt()
 /* Forces */
 
   function createForces() {
-    var forceStrength = 0.05;
+    var forceStrength = 0.03;
 
     forces = {
       combine:        createCombineForces(),
@@ -348,7 +348,7 @@ circleRadiusScale = d3.scaleSqrt()
         .force("x", forces.x)
         .force("y", forces.y)
         .force("collide", d3.forceCollide(forceCollide))
-        .alphaTarget(0.5)
+        .alphaTarget(0.3)
         .restart();
     }
 
