@@ -46,8 +46,7 @@ function createBubbleChart(error, entries) {
     var responses = d3.set(entries.map(function(entry) { return entry[responseCountKey]; }));
     responseDomain = responses.values();
 
-    var time = d3.set(entries.map(function(entry) { return entry[timeKey]; }));
-    timeDomain = time.values();
+    timeDomain = entries.map(function(entry) { return entry[timeKey]; });
 
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(topicDomain);
 
@@ -270,14 +269,14 @@ circleRadiusScale = d3.scaleSqrt()
 
 
     function createOverTimeForces() {
-      var scaledLengthMargin = circleSize.max;
+      var scaledLengthMargin = 100;
 
       lengthScaleX = d3.scaleTime()
         .domain(timeDomain)
-        .range([0, 100]);
+        .range([scaledLengthMargin, width-scaledLengthMargin]);
       lengthScaleY = d3.scaleLinear()
         .domain(responseDomain)
-        .range([0, 100]);
+        .range([scaledLengthMargin, height-scaledLengthMargin]);
 
       return {
         x: d3.forceX(function(d) {
