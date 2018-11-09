@@ -158,7 +158,7 @@ circleRadiusScale = d3.scaleSqrt()
         "<br>Topic: ",elem[topicKey],
         "<br>Length: ", elem['chars_total'],
         "<br>Number of Children: ", elem[responseCountKey],
-        "<br>Time: ", elem[timeKey].toISOString().substring(0, 10)
+        "<br>Time: ", elem[timeKey].toDateString()
         ].join("");
       }
       d3.select("#country-info").html(info);
