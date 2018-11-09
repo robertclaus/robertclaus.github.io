@@ -310,7 +310,7 @@ circleRadiusScale = d3.scaleSqrt()
   }
 
   function forceCollide(d) {
-    return lengthGrouping() ? 0 : circleRadiusScale(d.chars_total * (scale/100)) + 1;
+    return circleRadiusScale(d.chars_total * (scale/100)) + 1;
   }
 
     function updateForces(forces) {
@@ -397,7 +397,7 @@ d3.select("#scale").on("change",function(){
             tickFormat = ".0s";
 
         var xAxis = d3.axisBottom(lengthScaleX)
-          .ticks(numberOfTicks, tickFormat);
+          //.ticks(numberOfTicks, tickFormat);
 
         svg.append("g")
           .attr("class", "x-axis")
@@ -407,7 +407,7 @@ d3.select("#scale").on("change",function(){
             .attr("font-size", "16px");
 
         var yAxis = d3.axisLeft(lengthScaleY)
-          .ticks(numberOfTicks, tickFormat);
+          //.ticks(numberOfTicks, tickFormat);
         svg.append("g")
           .attr("class", "y-axis")
           .attr("transform", "translate(" + offScreenXOffset + ",0)")
