@@ -275,10 +275,11 @@ circleRadiusScale = d3.scaleSqrt()
       var scaledLengthMargin = circleSize.max;
 
       lengthScaleX = d3.scaleBand()
+        .domain(timeDomain)
         .range([timeDomain[0], timeDomain[timeDomain.length-1]);
       lengthScaleY = d3.scaleLog()
         .domain(responseDomain)
-        .range([height - scaledLengthMargin, scaledLengthMargin*2]);
+        .range([0, scaledLengthMargin*2]);
 
       var centerCirclesInScaleBandOffset = lengthScaleX.bandwidth() / 2;
 
