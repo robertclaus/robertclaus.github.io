@@ -157,7 +157,12 @@ circleRadiusScale = d3.scaleSqrt()
     function updateCountryInfo(elem) {
       var info = "";
       if (elem) {
-        info = ["Group: ",elem[groupKey],"<br>Topic: ",elem[topicKey], "<br>Length: ", elem['chars_total'], "<br>Number of Children: ", elem[responseCountKey]].join("");
+        info = ["Group: ",elem[groupKey],
+        "<br>Topic: ",elem[topicKey],
+        "<br>Length: ", elem['chars_total'],
+        "<br>Number of Children: ", elem[responseCountKey]
+        "<br>Time: ", elem[timeKey]
+        ].join("");
       }
       d3.select("#country-info").html(info);
     }
@@ -281,10 +286,10 @@ circleRadiusScale = d3.scaleSqrt()
 
       return {
         x: d3.forceX(function(d) {
-            return lengthScaleX(d[topicKey]) + centerCirclesInScaleBandOffset;
+            return lengthScaleX(d[timeKey]) + centerCirclesInScaleBandOffset;
           }).strength(forceStrength),
         y: d3.forceY(function(d) {
-          return lengthScaleY(d.chars_total);
+          return lengthScaleY(d[responseCountKey]);
         }).strength(forceStrength)
       };
     }
