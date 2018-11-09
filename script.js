@@ -286,10 +286,10 @@ circleRadiusScale = d3.scaleSqrt()
     function createOverTimeForces() {
       return {
         x: d3.forceX(function(d) {
-            return generateTimeForces(true, responseDomain, responseCountKey);
+            return generateTimeForces(d, true, responseDomain, responseCountKey);
           }).strength(forceStrength),
         y: d3.forceY(function(d) {
-          return generateTimeForces(false, responseDomain, responseCountKey);
+          return generateTimeForces(d, false, responseDomain, responseCountKey);
         }).strength(forceStrength)
       };
     }
@@ -297,15 +297,15 @@ circleRadiusScale = d3.scaleSqrt()
     function createOverTimeSizeForces() {
           return {
             x: d3.forceX(function(d) {
-                return generateTimeForces(true, lengthDomain, lengthKey);
+                return generateTimeForces(d, true, lengthDomain, lengthKey);
               }).strength(forceStrength),
             y: d3.forceY(function(d) {
-              return generateTimeForces(false, lengthDomain, lengthKey);
+              return generateTimeForces(d, false, lengthDomain, lengthKey);
             }).strength(forceStrength)
           };
         }
 
-     function generateTimeForces(isX, yDomain, yKey) {
+     function generateTimeForces(d, isX, yDomain, yKey) {
             var scaledLengthMargin = 100;
            var startDate = timeDomain[0];
            var endDate = timeDomain[timeDomain.length -1];
