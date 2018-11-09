@@ -4,7 +4,7 @@ var userDomain;
 var responseDomain;
 var timeDomain;
 
-var timeFormat = d3.time.format('%Y-%m-%dT%H:%M:%S');
+var timeFormat;
 
 var width;
 var height;
@@ -30,6 +30,8 @@ function createBubbleChart(error, entries) {
   var groupKey = "groupID";
   var responseCountKey = "numChildren";
   var timeKey = "time";
+
+  timeFormat = d3.time.format('%Y-%m-%dT%H:%M:%S');
 
   var groups = d3.set(entries.map(function(entry) { return entry[groupKey]; }));
   groupDomain = groups.values();
