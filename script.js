@@ -34,7 +34,7 @@ function createBubbleChart(error, entries) {
   timeParse = d3.timeParse('%Y-%m-%dT%H:%M:%S');
 
   entries.forEach(function(d) {
-      d[timeKey] = parseDate(d[timeKey]);
+      d[timeKey] = timeParse(d[timeKey]);
   });
 
   var groups = d3.set(entries.map(function(entry) { return entry[groupKey]; }));
