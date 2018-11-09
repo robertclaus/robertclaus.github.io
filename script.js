@@ -3,6 +3,7 @@ var topicDomain;
 var userDomain;
 var responseDomain;
 var timeDomain;
+var lengthDomain;
 
 var showAxis=false;
 
@@ -31,6 +32,7 @@ function createBubbleChart(error, entries) {
   var groupKey = "groupID";
   var responseCountKey = "numChildren";
   var timeKey = "time";
+  var lengthKey = "chars_total";
 
   entries.forEach(function(d) {
       d[timeKey] = new Date(Date.parse(d[timeKey]));
@@ -47,9 +49,11 @@ function createBubbleChart(error, entries) {
     var users = d3.set(entries.map(function(entry) { return entry["user"]; }));
     userDomain = users.values();
 
-    responseDomain = entries.map(function(entry) { return entry[responseCountKey]; }).sort(function(a,b){ return a-b;});;
+    responseDomain = entries.map(function(entry) { return entry[responseCountKey]; }).sort(function(a,b){ return b-a;});;
 
     timeDomain = entries.map(function(entry) { return entry[timeKey]; }).sort(function(a,b){ return a-b;});;
+
+    lengthDomain = entries.map(function(entry) { return entry[lengthKey]; }).sort(function(a,b){ return a-b;});;
 
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(topicDomain);
 
@@ -199,7 +203,8 @@ circleRadiusScale = d3.scaleSqrt()
       group:      createGroupedForces(),
       topic:      createTopicForces(),
       user:         createUserForces(),
-      over_time:     createOverTimeForces()
+      over_time:     createOverTimeForces(),
+      over_time_size: createOverTimeSizeForceS()
     };
 
     function createCombineForces() {
@@ -301,6 +306,29 @@ circleRadiusScale = d3.scaleSqrt()
       };
     }
 
+    function createOverTimeSizeForces() {
+          var scaledLengthMargin = 100;
+
+          var startDate = timeDomain[0];
+          var endDate = timeDomain[timeDomain.length -1];
+
+          lengthScaleX = d3.scaleTime()
+            .domain([endDate, startDate])
+            .range([scaledLengthMargin, width-scaledLengthMargin]);
+          lengthScaleY = d3.scaleLinear()
+            .domain([lengthDomain[0], lengthDomain[lengthDomain.length-1]])
+            .range([scaledLengthMargin, height-scaledLengthMargin]);
+
+          return {
+            x: d3.forceX(function(d) {
+                return lengthScaleX(d[timeKey]);
+              }).strength(forceStrength),
+            y: d3.forceY(function(d) {
+              return lengthScaleY(d[lengthKey]);
+            }).strength(forceStrength)
+          };
+        }
+
   }
 
   function createForceSimulation() {
@@ -369,6 +397,7 @@ d3.select("#scale").on("change",function(){
     addListener("#topic", forces.topic, false);
     addListener("#user", forces.user, false);
     addListener("#over_time", forces.over_time, true);
+    addListener("#over_time_size",forces.over_time_size, true);
 
     function addListener(selector, forces, should_show_axis) {
 
