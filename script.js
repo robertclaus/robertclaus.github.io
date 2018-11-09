@@ -276,7 +276,7 @@ circleRadiusScale = d3.scaleSqrt()
 
       lengthScaleX = d3.scaleBand()
         .domain(timeDomain)
-        .range([timeDomain[0], timeDomain[timeDomain.length-1]);
+        .range([timeDomain[0], timeDomain[timeDomain.length-1]]);
       lengthScaleY = d3.scaleLog()
         .domain(responseDomain)
         .range([0, scaledLengthMargin*2]);
