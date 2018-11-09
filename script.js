@@ -95,7 +95,7 @@ circleRadiusScale = d3.scaleSqrt()
     var continentKey = d3.select(".continent-key");
 
 
-    translateContinentKey("translate(0," + (height - onScreenYOffset) + ")");
+    translateContinentKey("translate(0," + (0 - onScreenYOffset) + ")");
 
     if(should_show) {
         continentKey.style("opacity", 1);
@@ -111,7 +111,7 @@ circleRadiusScale = d3.scaleSqrt()
 
       svg.append("g")
         .attr("class", "continent-key")
-        .attr("transform", "translate(0," + (height + offScreenYOffset) + ")")
+        .attr("transform", "translate(0," + (0 + offScreenYOffset) + ")")
         .selectAll("g")
         .data(topicDomain)
         .enter()
