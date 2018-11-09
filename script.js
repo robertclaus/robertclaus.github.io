@@ -371,8 +371,11 @@ d3.select("#scale").on("change",function(){
     addListener("#over_time", forces.over_time, true);
 
     function addListener(selector, forces, should_show_axis) {
-    showAxis = should_show_axis;
+
+
       d3.select(selector).on("click", function() {
+
+      showAxis = should_show_axis;
         currentForces = forces;
         updateForces(forces);
         toggleContinentKey(!lengthGrouping());
