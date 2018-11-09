@@ -100,7 +100,7 @@ circleRadiusScale = d3.scaleSqrt()
     }
 
     function createContinentKey() {
-      var keyWidth = keyElementWidth * groups.values().length;
+      var keyWidth = keyElementWidth * topicDomain.length;
       var continentKeyScale = d3.scaleBand()
         .domain(topicDomain)
         .range([(width - keyWidth) / 2, (width + keyWidth) / 2]);
@@ -109,7 +109,7 @@ circleRadiusScale = d3.scaleSqrt()
         .attr("class", "continent-key")
         .attr("transform", "translate(0," + (height + offScreenYOffset) + ")")
         .selectAll("g")
-        .data(groups.values())
+        .data(topicDomain)
         .enter()
           .append("g")
             .attr("class", "continent-key-element");

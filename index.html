@@ -29,7 +29,8 @@
   var file = "data.csv";
   var url_param = window.location.search;
   if(url_param.length > 1) {
-    file = url_param.substring(1);
+    var corswrapper = "https://cors-anywhere.herokuapp.com/";
+    file = corswrapper + url_param.substring(1);
   }
 
 
