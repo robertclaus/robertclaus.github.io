@@ -273,10 +273,10 @@ circleRadiusScale = d3.scaleSqrt()
 
       lengthScaleX = d3.scaleTime()
         .domain(timeDomain)
-        .range([scaledLengthMargin, width-scaledLengthMargin]);
+        .range([150, 300]);
       lengthScaleY = d3.scaleLinear()
         .domain(responseDomain)
-        .range([scaledLengthMargin, height-scaledLengthMargin]);
+        .range([350, 950]);
 
       return {
         x: d3.forceX(function(d) {
