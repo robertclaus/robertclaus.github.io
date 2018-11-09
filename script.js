@@ -142,7 +142,7 @@ circleRadiusScale = d3.scaleSqrt()
       .data(entries)
       .enter()
         .append("circle")
-        .attr("r", function(d) { return circleRadiusScale(d.chars_total); })
+        .attr("r", function(d) { return circleRadiusScale(d.chars_total * (scale/100)); })
         .on("mouseover", function(d) {
           updateCountryInfo(d);
         })
