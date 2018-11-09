@@ -160,7 +160,7 @@ circleRadiusScale = d3.scaleSqrt()
         info = ["Group: ",elem[groupKey],
         "<br>Topic: ",elem[topicKey],
         "<br>Length: ", elem['chars_total'],
-        "<br>Number of Children: ", elem[responseCountKey]
+        "<br>Number of Children: ", elem[responseCountKey],
         "<br>Time: ", elem[timeKey]
         ].join("");
       }
