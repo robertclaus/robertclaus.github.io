@@ -4,7 +4,6 @@ var userDomain;
 var responseDomain;
 var timeDomain;
 
-var timeParse;
 
 var width;
 var height;
@@ -30,8 +29,6 @@ function createBubbleChart(error, entries) {
   var groupKey = "groupID";
   var responseCountKey = "numChildren";
   var timeKey = "time";
-
-  timeParse = d3.timeParse('%Y-%m-%dT%H:%M:%S+00:00');
 
   entries.forEach(function(d) {
       d[timeKey] = Date.parse(d[timeKey]);
@@ -161,7 +158,7 @@ circleRadiusScale = d3.scaleSqrt()
         "<br>Topic: ",elem[topicKey],
         "<br>Length: ", elem['chars_total'],
         "<br>Number of Children: ", elem[responseCountKey],
-        "<br>Time: ", elem[timeKey]
+        "<br>Time: ", dateFormat(elem[timeKey], "mmmm dS, yyyy");
         ].join("");
       }
       d3.select("#country-info").html(info);
@@ -277,10 +274,10 @@ circleRadiusScale = d3.scaleSqrt()
 
       lengthScaleX = d3.scaleTime()
         .domain(timeDomain)
-        .range([0, 500]);
+        .range([0, 100]);
       lengthScaleY = d3.scaleLinear()
         .domain(responseDomain)
-        .range([0, 500]);
+        .range([0, 100]);
 
       return {
         x: d3.forceX(function(d) {
