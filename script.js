@@ -284,50 +284,45 @@ circleRadiusScale = d3.scaleSqrt()
 
 
     function createOverTimeForces() {
-      var scaledLengthMargin = 100;
-
-      var startDate = timeDomain[0];
-      var endDate = timeDomain[timeDomain.length -1];
-
-      lengthScaleX = d3.scaleTime()
-        .domain([endDate, startDate])
-        .range([scaledLengthMargin, width-scaledLengthMargin]);
-      lengthScaleY = d3.scaleLinear()
-        .domain([responseDomain[0], responseDomain[responseDomain.length-1]])
-        .range([scaledLengthMargin, height-scaledLengthMargin]);
-
       return {
         x: d3.forceX(function(d) {
-            return lengthScaleX(d[timeKey]);
+            return generateTimeForces(true, responseDomain, responseCountKey);
           }).strength(forceStrength),
         y: d3.forceY(function(d) {
-          return lengthScaleY(d[responseCountKey]);
+          return generateTimeForces(false, responseDomain, responseCountKey);
         }).strength(forceStrength)
       };
     }
 
     function createOverTimeSizeForces() {
-          var scaledLengthMargin = 100;
-
-          var startDate = timeDomain[0];
-          var endDate = timeDomain[timeDomain.length -1];
-
-          lengthScaleX = d3.scaleTime()
-            .domain([endDate, startDate])
-            .range([scaledLengthMargin, width-scaledLengthMargin]);
-          lengthScaleY = d3.scaleLinear()
-            .domain([lengthDomain[0], lengthDomain[lengthDomain.length-1]])
-            .range([scaledLengthMargin, height-scaledLengthMargin]);
-
           return {
             x: d3.forceX(function(d) {
-                return lengthScaleX(d[timeKey]);
+                return generateTimeForces(true, lengthDomain, lengthKey);
               }).strength(forceStrength),
             y: d3.forceY(function(d) {
-              return lengthScaleY(d[lengthKey]);
+              return generateTimeForces(false, lengthDomain, lengthKey);
             }).strength(forceStrength)
           };
         }
+
+     function generateTimeForces(isX, yDomain, yKey) {
+            var scaledLengthMargin = 100;
+           var startDate = timeDomain[0];
+           var endDate = timeDomain[timeDomain.length -1];
+
+           lengthScaleX = d3.scaleTime()
+             .domain([endDate, startDate])
+             .range([scaledLengthMargin, width-scaledLengthMargin]);
+           lengthScaleY = d3.scaleLinear()
+             .domain([yDomain[0], yDomain[yDomain.length-1]])
+             .range([scaledLengthMargin, height-scaledLengthMargin]);
+
+           if(isX){
+                return lengthScaleX(d[timeKey]);
+           } else {
+               return lengthScaleY(d[yKey]);
+           }
+     }
 
   }
 
