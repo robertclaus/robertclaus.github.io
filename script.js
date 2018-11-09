@@ -167,7 +167,7 @@ circleRadiusScale = d3.scaleSqrt()
     function updateCountryInfo(elem) {
       var info = "";
       if (elem) {
-        info = ["Group: ",elem[groupKey],
+        info = ["<br><br><br><br>Group: ",elem[groupKey],
         "<br>Topic: ",elem[topicKey],
         "<br>Length: ", elem['chars_total'],
         "<br>Number of Children: ", elem[responseCountKey],
