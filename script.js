@@ -79,7 +79,7 @@ circleRadiusScale = d3.scaleSqrt()
         .attr("height", height);
   }
 
-  function toggleContinentKey() {
+  function toggleContinentKey(should_show) {
     var keyElementWidth = 150,
         keyElementHeight = 30;
     var onScreenYOffset = keyElementHeight*1.5,
@@ -90,12 +90,19 @@ circleRadiusScale = d3.scaleSqrt()
     }
     var continentKey = d3.select(".continent-key");
 
+
     translateContinentKey("translate(0," + (height - onScreenYOffset) + ")");
+
+    if(should_show) {
+        continentKey.style("opacity", 1);
+    }else{
+        continentKey.style("opacity", 0);
+    }
 
     function createContinentKey() {
       var keyWidth = keyElementWidth * groups.values().length;
       var continentKeyScale = d3.scaleBand()
-        .domain(groups.values())
+        .domain(topicDomain)
         .range([(width - keyWidth) / 2, (width + keyWidth) / 2]);
 
       svg.append("g")
