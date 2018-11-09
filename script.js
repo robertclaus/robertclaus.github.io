@@ -1,6 +1,11 @@
 var groupDomain;
 var topicDomain;
 var userDomain;
+var responseDomain;
+var timeDomain;
+
+var timeFormat = d3.time.format('%Y-%m-%dT%H:%M:%S');
+
 var width;
 var height;
 var scale = 100;
@@ -23,7 +28,8 @@ function createBubbleChart(error, entries) {
 
   var topicKey = "topicID";
   var groupKey = "groupID";
-  var responseCountKey = "numChildren"
+  var responseCountKey = "numChildren";
+  var timeKey = "time";
 
   var groups = d3.set(entries.map(function(entry) { return entry[groupKey]; }));
   groupDomain = groups.values();
@@ -31,11 +37,16 @@ function createBubbleChart(error, entries) {
     var topics = d3.set(entries.map(function(entry) { return entry[topicKey]; }));
     topicDomain = topics.values();
 
-        var users = d3.set(entries.map(function(entry) { return entry["user"]; }));
-        userDomain = users.values();
+    var users = d3.set(entries.map(function(entry) { return entry["user"]; }));
+    userDomain = users.values();
 
-  var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10)
-        .domain(groupDomain);
+    var responses = d3.set(entries.map(function(entry) { return entry[responseCountKey]; }));
+    responseDomain = responses.values();
+
+    var time = d3.set(entries.map(function(entry) { return entry[timeKey]; }));
+    timeDomain = time.values();
+
+  var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(topicDomain);
 
 
   width = 1200,
@@ -175,7 +186,7 @@ circleRadiusScale = d3.scaleSqrt()
       group:      createGroupedForces(),
       topic:      createTopicForces(),
       user:         createUserForces(),
-      length:     createLengthForces()
+      over_time:     createOverTimeForces()
     };
 
     function createCombineForces() {
@@ -253,18 +264,18 @@ circleRadiusScale = d3.scaleSqrt()
 
 
 
-3
-    function createLengthForces() {
+
+    function createOverTimeForces() {
       var scaledLengthMargin = circleSize.max;
 
       lengthScaleX = d3.scaleBand()
-        .domain(groupDomain)
-        .range([scaledLengthMargin, width - scaledLengthMargin*2]);
+        .range([timeFormat.parse(timeDomain[0]), timeFormat.parse(timeDomain[timeDomain.length-1])]);
       lengthScaleY = d3.scaleLog()
-        .domain(lengthExtent)
+        .domain(responseDomain)
         .range([height - scaledLengthMargin, scaledLengthMargin*2]);
 
       var centerCirclesInScaleBandOffset = lengthScaleX.bandwidth() / 2;
+
       return {
         x: d3.forceX(function(d) {
             return lengthScaleX(d[topicKey]) + centerCirclesInScaleBandOffset;
@@ -320,9 +331,9 @@ circleRadiusScale = d3.scaleSqrt()
 currentForces = forces.combine;
 
 d3.select("#scale").on("change",function(){
-scale = document.getElementById("scale").value;
-circles.attr("r", function(d) { return circleRadiusScale(d.chars_total * (scale/100)); });
-updateForces(currentForces);
+    scale = document.getElementById("scale").value;
+    circles.attr("r", function(d) { return circleRadiusScale(d.chars_total * (scale/100)); });
+    updateForces(currentForces);
 });
 
   function lengthGrouping() {
@@ -342,8 +353,7 @@ updateForces(currentForces);
     addListener("#groups", forces.group);
     addListener("#topic", forces.topic);
     addListener("#user", forces.user);
-    addListener("#total_chars", forces.length);
-    addListener("#response_count", forces.response_count)
+    addListener("#over_time", forces.over_time);
 
     function addListener(selector, forces) {
       d3.select(selector).on("click", function() {
