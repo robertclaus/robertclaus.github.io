@@ -26,8 +26,15 @@
 <div id="bubble-chart"></div>
 
 <script>
+  var file = "data.csv";
+  var url_param = window.location.search;
+  if(url_param.length > 1) {
+    file = url_param.substring(1);
+  }
+
+
   d3.queue()
-    .defer(d3.csv, "data.csv")
+    .defer(d3.csv, file)
     .await(createBubbleChart);
 </script>
 
