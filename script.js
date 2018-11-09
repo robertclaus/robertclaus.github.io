@@ -357,13 +357,14 @@ d3.select("#scale").on("change",function(){
   }
 
   function addGroupingListeners() {
-    addListener("#combine", forces.combine);
-    addListener("#groups", forces.group);
-    addListener("#topic", forces.topic);
-    addListener("#user", forces.user);
-    addListener("#over_time", forces.over_time);
+    addListener("#combine", forces.combine, false);
+    addListener("#groups", forces.group, false);
+    addListener("#topic", forces.topic, false);
+    addListener("#user", forces.user, false);
+    addListener("#over_time", forces.over_time, true);
 
-    function addListener(selector, forces) {
+    function addListener(selector, forces, should_show_axis) {
+    showAxis = should_show_axis;
       d3.select(selector).on("click", function() {
         currentForces = forces;
         updateForces(forces);
