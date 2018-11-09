@@ -53,7 +53,7 @@ function createBubbleChart(error, entries) {
 
     timeDomain = entries.map(function(entry) { return entry[timeKey]; }).sort(function(a,b){ return a-b;});;
 
-    lengthDomain = entries.map(function(entry) { return entry[lengthKey]; }).sort(function(a,b){ return a-b;});;
+    lengthDomain = entries.map(function(entry) { return entry[lengthKey]; }).sort(function(a,b){ return b-a;});;
 
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(topicDomain);
 
@@ -403,6 +403,8 @@ d3.select("#scale").on("change",function(){
         currentForces = forces;
         updateForces(forces);
         toggleContinentKey(!lengthGrouping());
+
+        d3.select(".y-axis").remove();
         toggleLengthAxes(lengthGrouping());
       });
     }
@@ -413,7 +415,7 @@ d3.select("#scale").on("change",function(){
       var onScreenYOffset = 40,
           offScreenYOffset = 100;
 
-      if (d3.select(".x-axis").empty()) {
+      if (d3.select(".y-axis").empty()) {
         createAxes();
       }
       var xAxis = d3.select(".x-axis"),
