@@ -4,6 +4,8 @@ var userDomain;
 var responseDomain;
 var timeDomain;
 
+var showAxis=false;
+
 
 var width;
 var height;
@@ -343,7 +345,7 @@ d3.select("#scale").on("change",function(){
 });
 
   function lengthGrouping() {
-    return false;
+    return showAxis;
   }
 
   function addFillListener() {
