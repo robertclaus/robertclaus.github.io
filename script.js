@@ -31,7 +31,7 @@ function createBubbleChart(error, entries) {
   var responseCountKey = "numChildren";
   var timeKey = "time";
 
-  timeParse = d3.timeParse('%Y-%m-%dT%H:%M:%S');
+  timeParse = d3.timeParse('%Y-%m-%dT%H:%M:%S+00:00');
 
   entries.forEach(function(d) {
       d[timeKey] = timeParse(d[timeKey]);
@@ -137,10 +137,6 @@ circleRadiusScale = d3.scaleSqrt()
         .duration(500)
         .attr("transform", translation);
     }
-  }
-
-  function isChecked(elementID) {
-    return d3.select(elementID).property("checked");
   }
 
   function createCircles() {
@@ -344,7 +340,7 @@ d3.select("#scale").on("change",function(){
 });
 
   function lengthGrouping() {
-    return isChecked("#total_chars");
+    return false;
   }
 
   function addFillListener() {
