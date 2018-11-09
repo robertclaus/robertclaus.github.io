@@ -275,7 +275,7 @@ circleRadiusScale = d3.scaleSqrt()
     function createOverTimeForces() {
       var scaledLengthMargin = circleSize.max;
 
-      lengthScaleX = d3.scaleBand()
+      lengthScaleX = d3.scaleTime()
         .domain(timeDomain)
         .range([timeDomain[0], timeDomain[timeDomain.length-1]]);
       lengthScaleY = d3.scaleLog()
