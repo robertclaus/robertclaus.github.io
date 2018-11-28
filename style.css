@@ -22,8 +22,8 @@ span:nth-child(2) {
   color: #666;
   font-size: 28px;
   position: absolute;
-  top: 60px;
-  left: 40px;
+  top: 5px;
+  right: 5px;
 }
 
 svg {
@@ -37,4 +37,8 @@ circle {
 
 .continent-key-element text {
   fill: white;
+}
+
+td {
+    min-width:20em;
 }
