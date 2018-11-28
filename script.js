@@ -59,7 +59,7 @@ function createBubbleChart(error, entries) {
 
 
   width = window.innerWidth-40;
-  height = Math.floor(window.innerHeight * 0.7);
+  height = Math.floor(window.innerHeight * 0.85);
 
 circleRadiusScale = d3.scaleSqrt()
     .domain(lengthExtent)
