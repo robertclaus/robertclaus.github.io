@@ -58,7 +58,7 @@ function createBubbleChart(error, entries) {
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(topicDomain);
 
 
-  width = 1200,
+  width = window.innerWidth-20;
   height = 800;
 
 circleRadiusScale = d3.scaleSqrt()
