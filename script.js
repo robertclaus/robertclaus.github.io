@@ -58,7 +58,7 @@ function createBubbleChart(error, entries) {
   var groupColorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(topicDomain);
 
 
-  width = window.innerWidth-20;
+  width = window.innerWidth-40;
   height = 800;
 
 circleRadiusScale = d3.scaleSqrt()
@@ -167,7 +167,7 @@ circleRadiusScale = d3.scaleSqrt()
     function updateCountryInfo(elem) {
       var info = "";
       if (elem) {
-        info = ["<br><br><br><br>Group: ",elem[groupKey],
+        info = ["Group: ",elem[groupKey],
         "<br>Topic: ",elem[topicKey],
         "<br>Length: ", elem['chars_total'],
         "<br>Number of Children: ", elem[responseCountKey],
