@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="style.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+  <script src="script.js"></script>
+  <title>D3 Country Bubble Chart</title>
+</head>
+<body>
+
+<div id="controls">
+    <table>
+      <tr>
+        <td><label><input id="combine" type="radio" name="grouping" value="combine" checked>How much discussion was there?</label></td>
+        <td><label><input id="groups" type="radio" name="grouping" value="groups">Are Groups Uniform?</label></td>
+        <td><label><input id="over_time" type="radio" name="grouping" value="over_time">When did popular posts occur?</label></td>
+      </tr>
+      <tr>
+        <td><label><input id="topic" type="radio" name="grouping" value="topic">Are Topics Uniform?</label></td>
+        <td><label><input id="user" type="radio" name="grouping" value="user">Are Users Uniform?</label></td>
+        <td><label><input id="over_time_size" type="radio" name="grouping" value="over_time_size">When did bigger posts occur?</label><br></td>
+      </tr>
+      <tr>
+        <td colspan="3"><label>Scale:  <input id="scale" type="number" value="5"></label></td>
+      </tr>
+    </table>
+</div>
+<div id="country-info"></div>
+<br/>
+<br/>
+<div id="bubble-chart"></div>
+
+<script>
+  var file = "data.csv";
+  var url_param = window.location.search;
+  if(url_param.length > 1) {
+    var corswrapper = "https://cors-anywhere.herokuapp.com/";
+    file = corswrapper + url_param.substring(1);
+  }
+
+
+  d3.queue()
+    .defer(d3.csv, file)
+    .await(createBubbleChart);
+</script>
+
+</body>
+</html>
