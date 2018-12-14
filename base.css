@@ -3,11 +3,18 @@ canvas{
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+}
 
-    max-width:50%;
+.container {
+    width:30%;
+    flex: 1 1 auto;
 }
 
 #canvas_container {
-    display: flex;
-    flex-wrap: wrap;
+    display:flex;
+    flex-wrap:wrap;
+}
+
+input[type=checkbox]:checked ~ #errorChart {
+   display:none !important;
 }

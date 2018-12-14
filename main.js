@@ -2,10 +2,11 @@
 
 window.onload = function() {
     window.charts = [];
+    addErrorChart();
     addPlot();
 
     var corswrapper = "https://cors-anywhere.herokuapp.com/";
-    var file = "https://raw.githubusercontent.com/gleicher/765-2017-dc2-simple-python-spaghetti/master/SampleData/simple-10-200.csv";
+    var file = "https://raw.githubusercontent.com/robertclaus/robertclaus.github.io/master/data/data2.csv";
 
     var url_param = window.location.search;
     if(url_param.length > 1) {
@@ -38,6 +39,13 @@ window.onload = function() {
 
 };
 
+addErrorChart = function(){
+    c = document.getElementById("errorChart");
+    var ctx = c.getContext('2d');
+    window.errorChart = new Chart(ctx, errorChartTemplate);
+}
+
+/*
 document.getElementById('randomizeData').addEventListener('click', function() {
     randomizeData();
 });
@@ -46,9 +54,11 @@ document.getElementById('addDataset').addEventListener('click', function() {
     addRandomDataset(0);
 });
 
+
 document.getElementById('splitPlot').addEventListener('click', function() {
     splitPlot();
 });
+*/
 
 document.getElementById('addPlot').addEventListener('click', function() {
     addPlot();

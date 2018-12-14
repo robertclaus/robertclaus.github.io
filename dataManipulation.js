@@ -3,14 +3,19 @@ var allDataSets = [];
 var plot_count = 0;
 var dataset_count = 0;
 
+var error_per_plot = [];
+
 var colorNames = Object.keys(window.chartColors);
 
 drawChart = function(){
     for(var i = 0; i<plot_count; i++) {
         if(window.charts[i]){
             window.charts[i].update();
+            window.charts[i].resize();
         }
     }
+
+    window.errorChart.update();
 }
 
 setLabel = function(labels) {
@@ -67,12 +72,16 @@ randomizeData = function(){
 
 
 addPlot = function(){
+    d = document.createElement("div");
+    d.classList.toggle("container");
+
     c = document.createElement("canvas");
 
     c.id = "c_"+plot_count;
 
     container = document.getElementById("canvas_container");
-    container.appendChild(c);
+    d.appendChild(c);
+    container.appendChild(d);
 
     var ctx = c.getContext('2d');
     var config = JSON.parse(JSON.stringify(configTemplate));
@@ -82,6 +91,12 @@ addPlot = function(){
     window.charts[plot_count] = new Chart(ctx, allDataSets[plot_count]);
 
     plot_count++;
+
+    drawChart();
+
+    if(plot_count>1){
+        splitPlot();
+    }
 }
 
 getDatasetData = function(dataset_id){
@@ -124,7 +139,7 @@ splitPlot = function(){
             for(var group_idx = 0; group_idx < groups.length; group_idx++) {
                 var group_conflict = 0;
                 for(var group_entry_idx = 0; group_entry_idx < groups[group_idx].length; group_entry_idx++) {
-                    group_conflict += scores[dataset][groups[group_idx][group_entry_idx]];
+                    group_conflict += scores[dataset][groups[group_idx][group_entry_idx]]/groups[group_idx].length;
                 }
 
                 if(group_conflict < min_impact) {
@@ -151,6 +166,26 @@ splitPlot = function(){
     for(var plot_id = 0; plot_id < plot_count; plot_id++) {
         allDataSets[plot_id].data.datasets = grouped_datasets[plot_id];
     }
+
+    total_error = 0;
+    groups.forEach(function(group) {
+        group.forEach(function(dataset_1){
+            group.forEach(function(dataset_2){
+                total_error+=scores[dataset_1][dataset_2]
+            });
+        });
+    });
+    document.getElementById("total_error").innerHTML = total_error/plot_count;
+    error_per_plot[plot_count-1] = total_error/plot_count;
+
+    errorChartTemplate.data.labels = [];
+    for(var i=1; i<=plot_count; i++) { errorChartTemplate.data.labels.push(i);}
+    var newDataset = {
+            label: 'Error',
+            data: error_per_plot,
+            fill: false
+        };
+    errorChartTemplate.data.datasets = [newDataset];
 
     drawChart();
 
