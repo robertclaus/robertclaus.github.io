@@ -3,9 +3,6 @@
 window.onload = function() {
     window.charts = [];
     addPlot();
-    addPlot();
-    addPlot();
-    addPlot();
 
     var corswrapper = "https://cors-anywhere.herokuapp.com/";
     var file = "https://raw.githubusercontent.com/gleicher/765-2017-dc2-simple-python-spaghetti/master/SampleData/simple-10-200.csv";
@@ -38,18 +35,6 @@ window.onload = function() {
 
         splitPlot();
     });
-
-
-
-/*
-    addRandomDataset(0);
-    addRandomDataset(0);
-    addRandomDataset(0);
-    addRandomDataset(0);
-    addRandomDataset(0);
-    addRandomDataset(0);
-    addRandomDataset(0);
-    addRandomDataset(0);*/
 
 };
 
