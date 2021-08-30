@@ -5,7 +5,7 @@ window.onload = function() {
     addErrorChart();
     addPlot();
 
-    var corswrapper = "https://cors-anywhere.herokuapp.com/";
+    //var corswrapper = "https://cors-anywhere.herokuapp.com/";
     var file = "https://raw.githubusercontent.com/robertclaus/robertclaus.github.io/master/data/data2.csv";
 
     var url_param = window.location.search;
@@ -13,7 +13,7 @@ window.onload = function() {
         file = url_param.substring(1);
     }
 
-    file = corswrapper + file;
+    //file = corswrapper + file;
 
     getText(file, function(text){
         var csv = parseCSV(text);
